@@ -9,7 +9,7 @@ export class GeneralError extends Error {
   #dateTime;
   #code;
 
-  constructor({ message, isPrivate = false, code = "E0" }) {
+  constructor({ message, isPrivate = false, code = "E0" } = {}) {
     super(message);
     this.#dateTime = new Date();
     this.#private = isPrivate;
