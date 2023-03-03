@@ -1,19 +1,19 @@
-import { BadRequestError } from "../errors";
+import { BadRequestError } from "../errors/index.js";
 
 const validateEmail = (email) => {
   if (typeof email !== "string") {
     throw new BadRequestError({
       message: "The email is not a string.",
-      code: "E2_",
+      code: "E2_8",
     });
   }
 
-  const trimmed = email.trim();
+  const trimmed = email.replace(/\s+/g, "");
 
   if (trimmed.length === 0)
     throw new BadRequestError({
       message: "The email is an empty string.",
-      code: "E2_",
+      code: "E2_9",
     });
 
   if (
@@ -21,7 +21,12 @@ const validateEmail = (email) => {
       trimmed
     )
   )
-    throw new BadRequestError();
+    throw new BadRequestError({
+      message: "Invalid email address",
+      code: "E2_10",
+    });
+
+  return trimmed;
 };
 
 export { validateEmail };
