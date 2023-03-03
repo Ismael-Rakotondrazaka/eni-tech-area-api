@@ -1,4 +1,10 @@
-import { GeneralError, UnknownError } from "../utils/errors/index.js";
+import jwt from "jsonwebtoken";
+
+import {
+  GeneralError,
+  UnauthorizedError,
+  UnknownError,
+} from "../utils/errors/index.js";
 import { createErrorResponse } from "../utils/responses/index.js";
 
 const errorMiddleware = (err, req, res, next) => {
@@ -7,6 +13,15 @@ const errorMiddleware = (err, req, res, next) => {
       return res.status(err.getStatusCode()).json(
         createErrorResponse({
           error: err,
+          request: req,
+        })
+      );
+    } else if (err instanceof jwt.JsonWebTokenError) {
+      const unauthorizedError = new UnauthorizedError();
+
+      return res.status(unauthorizedError.getStatusCode()).json(
+        createErrorResponse({
+          error: unauthorizedError,
           request: req,
         })
       );
