@@ -25,9 +25,6 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
   port: dbPort,
   logging,
-  sync: {
-    force: true,
-  },
 });
 
 const User = createUserModel(sequelize, DataTypes);
