@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { storeVote } from "../../../../../../controllers/index.js";
+import { storeVote, showVote } from "../../../../../../controllers/index.js";
 import { authMiddleware } from "../../../../../../middlewares/index.js";
 
 const voteRoutes = Router({
@@ -7,5 +7,6 @@ const voteRoutes = Router({
 });
 
 voteRoutes.post("/", authMiddleware, storeVote);
+voteRoutes.get("/:voteId", authMiddleware, showVote);
 
 export { voteRoutes };
