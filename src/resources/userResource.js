@@ -7,6 +7,8 @@ const userResource = (resource) => {
       full: resource.fullName,
     },
     email: resource.email,
+    role: resource.role,
+    level: resource.level,
     gender: resource.gender,
     imageUrl: resource.imageUrl,
     description: resource.description,

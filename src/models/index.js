@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import Sequelize, { DataTypes } from "sequelize";
 
 import createUserModel from "./User.js";
-import createAdminModel from "./Admin.js";
 import createAnswerModel from "./Answer.js";
 import createCommentModel from "./Comment.js";
 import createNotificationModel from "./Notification.js";
@@ -45,9 +44,6 @@ const UserTag = createUserTagModel(sequelize, DataTypes);
 const Vote = createVoteModel(sequelize, DataTypes);
 
 db[User.name] = User;
-const Admin = createAdminModel(sequelize, DataTypes);
-
-db[Admin.name] = Admin;
 db[Answer.name] = Answer;
 db[Comment.name] = Comment;
 db[Notification.name] = Notification;
@@ -69,7 +65,6 @@ export default db;
 export {
   sequelize,
   Sequelize,
-  Admin,
   User,
   Answer,
   Comment,
