@@ -7,3 +7,4 @@ export * from "./answers/index.js";
 export * from "./comments/index.js";
 export * from "./votes/index.js";
 export * from "./users/index.js";
+export * from "./userTags/index.js";
