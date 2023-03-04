@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { storeStudentFile } from "../../../../controllers/index.js";
+import { storeUserListFile } from "../../../../controllers/index.js";
 import { uploadFile } from "../../../../services/multer/index.js";
 
-const studentFileRoutes = Router();
-studentFileRoutes.post("/", uploadFile.array("studentFile"), storeStudentFile);
+const userListFileRoutes = Router();
+userListFileRoutes.post("/", uploadFile.single("userListFile"), storeUserListFile);
 //studentFileRoutes.post("/", uploadFile.single("studentFile"), storeStudentFile);
 //studentFileRoutes.post("/", storeStudentFile);
-export { studentFileRoutes };
+export { userListFileRoutes };
