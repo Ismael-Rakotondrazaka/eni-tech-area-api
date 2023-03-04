@@ -4,3 +4,4 @@ export * from "./answerResource.js";
 export * from "./answerCollection.js";
 export * from "./commentResource.js";
 export * from "./commentCollection.js";
+export * from "./voteResource.js";
