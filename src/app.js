@@ -7,6 +7,7 @@ import { authRoutes } from "./routes/api/v1/auth/index.js";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import { notFoundController } from "./controllers/routes/notFoundController.js";
 import { questionRoutes } from "./routes/api/v1/questions/index.js";
+import { userRoutes } from "./routes/api/v1/users/index.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/v1/qrcodes", qrCodeRoutes);
 app.use("/api/v1/emails", emailRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/questions", questionRoutes);
+app.use("/api/v1/users", userRoutes);
 
 app.use("*", notFoundController);
 
