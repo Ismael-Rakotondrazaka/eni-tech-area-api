@@ -4,6 +4,8 @@ const answerResource = (resource) => {
     userId: resource.userId,
     questionId: resource.questionId,
     content: resource.content,
+    createdAt: resource.createdAt,
+    updatedAt: resource.updatedAt,
   };
 };
 

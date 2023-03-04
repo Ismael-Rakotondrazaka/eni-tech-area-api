@@ -4,6 +4,8 @@ const questionResource = (resource) => {
     title: resource.title,
     content: resource.content,
     userId: resource.userId,
+    createdAt: resource.createdAt,
+    updatedAt: resource.updatedAt,
   };
 };
 
