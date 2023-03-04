@@ -35,7 +35,7 @@ const indexUserTag = async (req, res, next) => {
     const targetUserTagsResource = userTagCollection(targetUserTags);
 
     const data = {
-      user: targetUserTagsResource,
+      tags: targetUserTagsResource,
     };
 
     const dataResponse = createDataResponse({

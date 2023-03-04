@@ -9,7 +9,7 @@ const validateTag = (tag) => {
 
   const trimmed = tag.trim();
 
-  return trimmed;
+  return trimmed.toUpperCase();
 };
 
 export { validateTag };
