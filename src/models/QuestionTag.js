@@ -24,6 +24,13 @@ export default (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER,
       },
+      questionId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "questions",
+          key: "id",
+        },
+      },
       tagName: {
         type: DataTypes.STRING,
         allowNull: false,
