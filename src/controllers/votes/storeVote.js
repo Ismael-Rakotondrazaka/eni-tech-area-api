@@ -1,7 +1,14 @@
-import { Answer, User, Vote } from "../../models/index.js";
+import {
+  Answer,
+  User,
+  UserTag,
+  Vote,
+  QuestionTag,
+} from "../../models/index.js";
 import { voteResource } from "../../resources/index.js";
 import {
   UnauthorizedError,
+  ForbiddenError,
   createDataResponse,
   NotFoundError,
   validateVoteType,
@@ -34,7 +41,17 @@ const storeVote = async (req, res, next) => {
 
     if (!targetAnswer) throw new NotFoundError();
 
+    if (authUser.id === targetAnswer.id)
+      throw new ForbiddenError({
+        message: "can't vote your own answer",
+        code: "E2_",
+      });
+
     type = validateVoteType(type);
+
+    const targetAnswerer = await User.findByPk(targetAnswer.userId);
+
+    if (!targetAnswerer) throw new NotFoundError();
 
     const voted = await Vote.findOne({
       where: {
@@ -49,7 +66,7 @@ const storeVote = async (req, res, next) => {
       if (voted.type === type) {
         throw new ConflictError({
           message: `Already vote the answer as ${voted.type}`,
-          code: "E4_",
+          code: "E6_",
         });
       } else {
         await voted.update({
@@ -64,6 +81,39 @@ const storeVote = async (req, res, next) => {
         userId: authUser.id,
         type,
       });
+    }
+
+    const targetAnswerTags = await QuestionTag.findAll({
+      where: {
+        questionId: targetAnswer.questionId,
+      },
+    });
+
+    const targetAnswerTagsNames = targetAnswerTags.map((tag) => tag.tagName);
+
+    const targetUserTags = await UserTag.findAll({
+      where: {
+        userId: targetAnswerer.id,
+        tagName: targetAnswerTagsNames,
+      },
+    });
+
+    if (type === "up") {
+      await Promise.all(
+        targetUserTags.map(async (tag) => {
+          await tag.update({
+            score: tag.score + 1,
+          });
+        })
+      );
+    } else {
+      await Promise.all(
+        targetUserTags.map(async (tag) => {
+          await tag.update({
+            score: tag.score - 1,
+          });
+        })
+      );
     }
 
     const targetVoteResource = voteResource(targetVote);
