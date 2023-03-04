@@ -6,3 +6,5 @@ export * from "./commentResource.js";
 export * from "./commentCollection.js";
 export * from "./voteResource.js";
 export * from "./voteCollection.js";
+export * from "./userTagCollection.js";
+export * from "./userTagResource.js";
