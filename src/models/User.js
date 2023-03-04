@@ -54,7 +54,7 @@ export default (sequelize, DataTypes) => {
       },
       gender: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       email: {
         field: "email",

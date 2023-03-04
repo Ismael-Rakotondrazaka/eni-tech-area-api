@@ -1,57 +1,61 @@
 import { User } from "../../models/index.js";
 import {
-  createDataResponse,
-  BadRequestError,
+  decodeToken,
   UnauthorizedError,
-  comparePassword,
-  validateEmail,
-  validatePassword,
+  BadRequestError,
+  createDataResponse,
   createAccessToken,
 } from "../../utils/index.js";
 import { userResource } from "../../resources/index.js";
 
-const login = async (req, res, next) => {
+const googleLogin = async (req, res, next) => {
   try {
-    let { email, password } = req.body;
+    const { token } = req.body;
 
-    const fieldsRequired = [
-      {
-        name: "email",
-        code: "E2_1",
-      },
-      {
-        name: "password",
-        code: "E2_2",
-      },
-    ];
+    if (!token)
+      throw new BadRequestError({
+        message: "token is missing",
+        code: "E2_20",
+      });
 
-    for (const field of fieldsRequired) {
-      const data = req.body[field.name];
-      if (!data)
-        throw new BadRequestError({
-          message: `Field '${field.name}' is required.`,
-          code: field.code,
-        });
-    }
+    const now = Date.now();
 
-    email = validateEmail(email);
-    validatePassword(password);
+    const decoded = decodeToken(token);
 
-    const targetUser = await User.findOne({
-      where: {
-        email,
-      },
-    });
-
-    if (!targetUser)
+    if (
+      decoded == null ||
+      typeof decoded !== "object" ||
+      typeof decoded === "string"
+    )
       throw new UnauthorizedError({
         message: "Credential doesn't match to our records.",
         code: "E5_1",
       });
 
-    const isPasswordMatch = comparePassword(password, targetUser.password);
+    const exp = decoded.exp;
+    if (!exp || exp <= now)
+      throw new UnauthorizedError({
+        message: "Credential doesn't match to our records.",
+        code: "E5_1",
+      });
 
-    if (!isPasswordMatch)
+    const email = decoded.email;
+    const providerId = decoded.sub;
+
+    if (!email || !providerId)
+      throw new UnauthorizedError({
+        message: "Credential doesn't match to our records.",
+        code: "E5_1",
+      });
+
+    const targetUser = await User.findOne({
+      where: {
+        email,
+        providerId,
+      },
+    });
+
+    if (!targetUser)
       throw new UnauthorizedError({
         message: "Credential doesn't match to our records.",
         code: "E5_1",
@@ -87,4 +91,4 @@ const login = async (req, res, next) => {
   }
 };
 
-export { login };
+export { googleLogin };

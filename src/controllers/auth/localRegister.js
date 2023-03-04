@@ -15,7 +15,7 @@ import {
   validateGender,
 } from "../../utils/index.js";
 
-const register = async (req, res, next) => {
+const localRegister = async (req, res, next) => {
   try {
     let { firstName, lastName, email, password, passwordValidation, gender } =
       req.body;
@@ -92,6 +92,8 @@ const register = async (req, res, next) => {
       channelId: createRandomString(),
     });
 
+    await targetUser.reload();
+
     const targetUserResource = userResource(targetUser);
 
     const accessTokenData = {
@@ -124,4 +126,4 @@ const register = async (req, res, next) => {
   }
 };
 
-export { register };
+export { localRegister };

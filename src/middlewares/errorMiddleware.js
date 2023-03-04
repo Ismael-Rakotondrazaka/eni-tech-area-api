@@ -18,7 +18,10 @@ const errorMiddleware = (err, req, res, next) => {
         })
       );
     } else if (err instanceof jwt.JsonWebTokenError) {
-      const unauthorizedError = new UnauthorizedError();
+      const unauthorizedError = new UnauthorizedError({
+        message: "Credential doesn't match to our records.",
+        code: "E5_1",
+      });
 
       return res.status(unauthorizedError.getStatusCode()).json(
         createErrorResponse({
