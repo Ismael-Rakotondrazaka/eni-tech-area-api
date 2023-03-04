@@ -5,7 +5,7 @@ const port = 8001;
 
 sequelize
   .sync({
-    // alter: true,
+    //alter: true,
   })
   .then(() => {
     app.listen(port, () => {
