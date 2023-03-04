@@ -8,6 +8,8 @@ const userResource = (resource) => {
     },
     email: resource.email,
     gender: resource.gender,
+    imageUrl: resource.imageUrl,
+    description: resource.description,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt,
   };
