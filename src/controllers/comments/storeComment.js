@@ -47,7 +47,7 @@ const storeComment = async (req, res, next) => {
 
     const targetComment = await Comment.create({
       userId: authUser.id,
-      answerId: targetQuestion.id,
+      answerId: targetAnswer.id,
       content,
     });
 
