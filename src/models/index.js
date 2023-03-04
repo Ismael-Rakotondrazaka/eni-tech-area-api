@@ -4,6 +4,13 @@ import dotenv from "dotenv";
 import Sequelize, { DataTypes } from "sequelize";
 
 import createUserModel from "./User.js";
+import createAnswerModel from "./Answer.js";
+import createCommentModel from "./Comment.js";
+import createNotificationModel from "./Notification.js";
+import createQuestionModel from "./Question.js";
+import createQuestionTagModel from "./QuestionTag.js";
+import createUserTagModel from "./UserTag.js";
+import createVoteModel from "./Vote.js";
 
 dotenv.config();
 
@@ -28,8 +35,22 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
 });
 
 const User = createUserModel(sequelize, DataTypes);
+const Answer = createAnswerModel(sequelize, DataTypes);
+const Comment = createCommentModel(sequelize, DataTypes);
+const Notification = createNotificationModel(sequelize, DataTypes);
+const Question = createQuestionModel(sequelize, DataTypes);
+const QuestionTag = createQuestionTagModel(sequelize, DataTypes);
+const UserTag = createUserTagModel(sequelize, DataTypes);
+const Vote = createVoteModel(sequelize, DataTypes);
 
 db[User.name] = User;
+db[Answer.name] = Answer;
+db[Comment.name] = Comment;
+db[Notification.name] = Notification;
+db[Question.name] = Question;
+db[QuestionTag.name] = QuestionTag;
+db[UserTag.name] = UserTag;
+db[Vote.name] = Vote;
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
@@ -41,4 +62,15 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 export default db;
-export { sequelize, Sequelize, User };
+export {
+  sequelize,
+  Sequelize,
+  User,
+  Answer,
+  Comment,
+  Notification,
+  Question,
+  QuestionTag,
+  UserTag,
+  Vote,
+};
