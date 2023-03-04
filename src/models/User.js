@@ -82,6 +82,14 @@ export default (sequelize, DataTypes) => {
         unique: true,
         allowNull: false,
       },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      level: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       channelId: {
         type: DataTypes.STRING,
         unique: true,
