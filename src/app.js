@@ -4,6 +4,7 @@ import cors from "cors";
 import { qrCodeRoutes } from "./routes/api/v1/qrcodes/index.js";
 import { emailRoutes } from "./routes/api/v1/emails/index.js";
 import { authRoutes } from "./routes/api/v1/auth/index.js";
+import { studentFileRoutes } from "./routes/api/v1/studentFile/index.js";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import { notFoundController } from "./controllers/routes/notFoundController.js";
 
@@ -25,6 +26,7 @@ app.use(
 app.use("/api/v1/qrcodes", qrCodeRoutes);
 app.use("/api/v1/emails", emailRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/studentFile", studentFileRoutes);
 
 app.use("*", notFoundController);
 

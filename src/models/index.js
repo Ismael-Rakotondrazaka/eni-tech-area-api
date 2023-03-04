@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import Sequelize, { DataTypes } from "sequelize";
 
 import createUserModel from "./User.js";
+import createAdminModel from "./Admin.js";
 
 dotenv.config();
 
@@ -30,6 +31,9 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
 const User = createUserModel(sequelize, DataTypes);
 
 db[User.name] = User;
+const Admin = createAdminModel(sequelize, DataTypes);
+
+db[Admin.name] = Admin;
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
@@ -41,4 +45,4 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 export default db;
-export { sequelize, Sequelize, User };
+export { sequelize, Sequelize, User, Admin };
