@@ -13,6 +13,25 @@ export default (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
+      models.User.hasMany(models.Answer, {
+        foreignKey: "userId",
+      });
+
+      models.User.hasMany(models.UserTag, {
+        foreignKey: "userId",
+      });
+
+      models.User.hasMany(models.Vote, {
+        foreignKey: "userId",
+      });
+
+      models.User.hasMany(models.Notification, {
+        foreignKey: "userId",
+      });
+
+      models.User.hasMany(models.Comment, {
+        foreignKey: "userId",
+      });
     }
   }
   User.init(
@@ -23,13 +42,10 @@ export default (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER,
       },
-      provider: {
-        type: DataTypes.STRING,
+      matricula: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-      },
-      providerId: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        unique: true,
       },
       firstName: {
         type: DataTypes.STRING,
@@ -54,7 +70,7 @@ export default (sequelize, DataTypes) => {
       },
       gender: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       email: {
         field: "email",
@@ -72,10 +88,6 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
       },
       imageUrl: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      description: {
         type: DataTypes.STRING,
         allowNull: true,
       },
