@@ -37,11 +37,11 @@ export default (sequelize, DataTypes) => {
         },
       },
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         required: true,
       },
       content: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },
