@@ -5,7 +5,6 @@ import {
   Vote,
   QuestionTag,
 } from "../../models/index.js";
-import { voteResource } from "../../resources/index.js";
 import {
   UnauthorizedError,
   ForbiddenError,
@@ -60,8 +59,6 @@ const storeVote = async (req, res, next) => {
       },
     });
 
-    let targetVote;
-
     if (voted) {
       if (voted.type === type) {
         throw new ConflictError({
@@ -72,11 +69,9 @@ const storeVote = async (req, res, next) => {
         await voted.update({
           type,
         });
-
-        targetVote = voted;
       }
     } else {
-      targetVote = await Vote.create({
+      await Vote.create({
         answerId,
         userId: authUser.id,
         type,
@@ -109,17 +104,32 @@ const storeVote = async (req, res, next) => {
     } else {
       await Promise.all(
         targetUserTags.map(async (tag) => {
-          await tag.update({
-            score: tag.score - 1,
-          });
+          if (tag.score > 0) {
+            await tag.update({
+              score: tag.score - 1,
+            });
+          }
         })
       );
     }
 
-    const targetVoteResource = voteResource(targetVote);
+    const upCount = await Vote.count({
+      where: {
+        type: "up",
+      },
+    });
+
+    const downCount = await Vote.count({
+      where: {
+        type: "down",
+      },
+    });
 
     const data = {
-      vote: targetVoteResource,
+      counts: {
+        up: upCount,
+        down: downCount,
+      },
     };
 
     const dataResponse = createDataResponse({
