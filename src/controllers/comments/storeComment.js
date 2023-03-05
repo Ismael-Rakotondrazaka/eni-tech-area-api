@@ -65,7 +65,7 @@ const storeComment = async (req, res, next) => {
       questionBy: questionOwner.id,
       answerId: targetAnswer.id,
       answerBy: answerOwner.id,
-      initiatedBy: authUser.id,
+      initiateBy: authUser.id,
       content,
     };
 

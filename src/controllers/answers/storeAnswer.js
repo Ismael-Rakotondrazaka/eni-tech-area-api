@@ -51,8 +51,9 @@ const storeAnswer = async (req, res, next) => {
     if (questionOwner.id !== authUser.id) {
       const notificationContent = {
         type: answerNotificationType,
-        answerTo: targetQuestion.id,
-        creatorId: authUser.id,
+        questionId: targetQuestion.id,
+        questionBy: questionOwner.id,
+        initiateBy: authUser.id,
         content,
       };
 
