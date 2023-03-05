@@ -1,4 +1,4 @@
-import { Answer, Question, User } from "../../models/index.js";
+import { Answer, Notification, Question, User } from "../../models/index.js";
 import { answerResource } from "../../resources/answerResource.js";
 import {
   validateContent,
@@ -33,7 +33,11 @@ const storeAnswer = async (req, res, next) => {
 
     if (!targetQuestion) throw new NotFoundError();
 
+    const questionOwner = await User.findByPk(targetQuestion.userId);
+
     content = validateContent(content);
+
+    const answerNotificationType = "answer";
 
     const targetAnswer = await Answer.create({
       userId: authUser.id,
@@ -42,6 +46,23 @@ const storeAnswer = async (req, res, next) => {
     });
 
     await targetAnswer.reload();
+
+    // the user will receive the notification only when the ansewerer is not the owner of the question
+    if (questionOwner.id !== authUser.id) {
+      const notificationContent = {
+        type: answerNotificationType,
+        questionId: targetQuestion.id,
+        questionBy: questionOwner.id,
+        initiateBy: authUser.id,
+        content,
+      };
+
+      // TODO send notification
+      /* const notification = */ await Notification.create({
+        userId: questionOwner.id,
+        content: JSON.stringify(notificationContent),
+      });
+    }
 
     const targetAnswerResource = answerResource(targetAnswer);
 

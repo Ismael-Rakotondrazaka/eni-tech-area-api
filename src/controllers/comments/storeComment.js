@@ -1,4 +1,4 @@
-import { Answer, Comment, Question, User } from "../../models/index.js";
+import { Answer, Comment, Question, User, Notification } from "../../models/index.js";
 import { commentResource } from "../../resources/index.js";
 import {
   validateContent,
@@ -52,6 +52,38 @@ const storeComment = async (req, res, next) => {
     });
 
     await targetComment.reload();
+
+    const commentNotificationType = "comment";
+
+    const questionOwner = await User.findByPk(targetQuestion.userId);
+
+    const answerOwner = await User.findByPk(targetAnswer.userId);
+
+    const notificationContent = {
+      type: commentNotificationType,
+      questionId: targetQuestion.id,
+      questionBy: questionOwner.id,
+      answerId: targetAnswer.id,
+      answerBy: answerOwner.id,
+      initiateBy: authUser.id,
+      content,
+    };
+
+    if (questionOwner.id !== authUser.id) {
+      // TODO send notification
+      /* const notification = */ await Notification.create({
+        userId: questionOwner.id,
+        content: JSON.stringify(notificationContent),
+      });
+    }
+
+    if (answerOwner.id !== authUser.id) {
+      // TODO send notification
+      /* const notification = */ await Notification.create({
+        userId: questionOwner.id,
+        content: JSON.stringify(notificationContent),
+      });
+    }
 
     const targetCommentResource = commentResource(targetComment);
 
