@@ -1,5 +1,7 @@
 import { Answer, Notification, Question, User } from "../../models/index.js";
 import { answerResource } from "../../resources/answerResource.js";
+import { notificationResource } from "../../resources/notificationResource.js";
+import { socketIO } from "../../services/socketIO/index.js";
 import {
   validateContent,
   UnauthorizedError,
@@ -57,11 +59,18 @@ const storeAnswer = async (req, res, next) => {
         content,
       };
 
-      // TODO send notification
-      /* const notification = */ await Notification.create({
+      const notification = await Notification.create({
         userId: questionOwner.id,
         content: JSON.stringify(notificationContent),
       });
+
+      const targetNotificationResource = notificationResource(notification);
+
+      const data = {
+        notification: targetNotificationResource,
+      };
+
+      socketIO.to(questionOwner.channelId).emit("notifications:store", data);
     }
 
     const targetAnswerResource = answerResource(targetAnswer);
