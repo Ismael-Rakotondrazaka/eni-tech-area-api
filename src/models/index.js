@@ -11,6 +11,7 @@ import createQuestionModel from "./Question.js";
 import createQuestionTagModel from "./QuestionTag.js";
 import createUserTagModel from "./UserTag.js";
 import createVoteModel from "./Vote.js";
+import createEventModel from "./Event.js";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ const Question = createQuestionModel(sequelize, DataTypes);
 const QuestionTag = createQuestionTagModel(sequelize, DataTypes);
 const UserTag = createUserTagModel(sequelize, DataTypes);
 const Vote = createVoteModel(sequelize, DataTypes);
+const Event = createEventModel(sequelize, DataTypes);
 
 db[User.name] = User;
 db[Answer.name] = Answer;
@@ -51,6 +53,7 @@ db[Question.name] = Question;
 db[QuestionTag.name] = QuestionTag;
 db[UserTag.name] = UserTag;
 db[Vote.name] = Vote;
+db[Event.name] = Event;
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
@@ -73,4 +76,5 @@ export {
   QuestionTag,
   UserTag,
   Vote,
+  Event,
 };
