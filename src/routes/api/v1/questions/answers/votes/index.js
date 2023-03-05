@@ -3,6 +3,7 @@ import {
   storeVote,
   showVote,
   indexVote,
+  indexVoteCount,
 } from "../../../../../../controllers/index.js";
 import { authMiddleware } from "../../../../../../middlewares/index.js";
 
@@ -11,7 +12,8 @@ const voteRoutes = Router({
 });
 
 voteRoutes.post("/", authMiddleware, storeVote);
-voteRoutes.get("/:voteId", authMiddleware, showVote);
 voteRoutes.get("/", authMiddleware, indexVote);
+voteRoutes.get("/counts", authMiddleware, indexVoteCount);
+voteRoutes.get("/:voteId", authMiddleware, showVote);
 
 export { voteRoutes };
