@@ -1,11 +1,21 @@
-import { Answer, Comment, Question, User, Notification } from "../../models/index.js";
-import { commentResource } from "../../resources/index.js";
+import {
+  Answer,
+  Comment,
+  Question,
+  User,
+  Notification,
+} from "../../models/index.js";
+import {
+  commentResource,
+  notificationResource,
+} from "../../resources/index.js";
 import {
   validateContent,
   UnauthorizedError,
   createDataResponse,
   NotFoundError,
 } from "../../utils/index.js";
+import { socketIO } from "../../services/socketIO/index.js";
 
 const storeComment = async (req, res, next) => {
   try {
@@ -70,19 +80,33 @@ const storeComment = async (req, res, next) => {
     };
 
     if (questionOwner.id !== authUser.id) {
-      // TODO send notification
-      /* const notification = */ await Notification.create({
+      const notification = await Notification.create({
         userId: questionOwner.id,
         content: JSON.stringify(notificationContent),
       });
+
+      const targetNotificationResource = notificationResource(notification);
+
+      const data = {
+        notification: targetNotificationResource,
+      };
+
+      socketIO.to(questionOwner.channelId).emit("notifications:store", data);
     }
 
     if (answerOwner.id !== authUser.id) {
-      // TODO send notification
-      /* const notification = */ await Notification.create({
+      const notification = await Notification.create({
         userId: questionOwner.id,
         content: JSON.stringify(notificationContent),
       });
+
+      const targetNotificationResource = notificationResource(notification);
+
+      const data = {
+        notification: targetNotificationResource,
+      };
+
+      socketIO.to(answerOwner.channelId).emit("notifications:store", data);
     }
 
     const targetCommentResource = commentResource(targetComment);
