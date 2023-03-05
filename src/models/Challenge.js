@@ -14,6 +14,10 @@ export default (sequelize, DataTypes) => {
       models.Challenge.hasMany(models.ChallengeAnswer, {
         foreignKey: "challengeId",
       });
+
+      models.Challenge.belongsTo(models.User, {
+        foreignKey: "challengeId",
+      });
     }
   }
 
@@ -40,6 +44,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      endAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      }
     },
     {
       sequelize,

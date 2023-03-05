@@ -31,6 +31,7 @@ export default (sequelize, DataTypes) => {
           model: "users",
           key: "id",
         },
+        allowNull: false,
       },
       challengeId: {
         type: DataTypes.INTEGER,
@@ -38,6 +39,7 @@ export default (sequelize, DataTypes) => {
           model: "challengeAnswers",
           key: "id",
         },
+        allowNull: false,
       },
       content: {
         type: DataTypes.TEXT,
@@ -46,6 +48,7 @@ export default (sequelize, DataTypes) => {
       status: {
         type: DataTypes.STRING,
         defaultValue: "pending",
+        allowNull: false,
       },
     },
     {
