@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
       });
 
       models.Challenge.belongsTo(models.User, {
-        foreignKey: "challengeId",
+        foreignKey: "userId",
       });
     }
   }
