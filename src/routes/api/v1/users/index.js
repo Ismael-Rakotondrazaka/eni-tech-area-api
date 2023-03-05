@@ -7,9 +7,11 @@ import {
 import { authMiddleware } from "../../../../middlewares/index.js";
 import { userTagRoutes } from "./userstags/index.js";
 import { userQuestionRoutes } from "./questions/index.js";
+import { searchUser } from "../../../../controllers/users/searchUser.js";
 
 const userRoutes = Router();
 
+userRoutes.get("/search", authMiddleware, searchUser);
 userRoutes.get("/:userId", authMiddleware, showUser);
 userRoutes.put("/:userId", authMiddleware, updateUser);
 userRoutes.get("/", authMiddleware, indexUser);

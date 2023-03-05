@@ -73,9 +73,7 @@ const searchQuestion = async (req, res, next) => {
           {
             model: QuestionTag,
             where: {
-              tagName: {
-                [Op.substring]: tagName,
-              },
+              tagName: tagName.toUpperCase(),
             },
           },
         ],
