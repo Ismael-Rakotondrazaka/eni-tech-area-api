@@ -87,7 +87,7 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
       },
       level: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true,
       },
       channelId: {
