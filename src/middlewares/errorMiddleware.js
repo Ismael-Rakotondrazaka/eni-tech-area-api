@@ -9,7 +9,6 @@ import { createErrorResponse } from "../utils/responses/index.js";
 
 const errorMiddleware = (err, req, res, next) => {
   if (err) {
-    console.log(err)
     if (err instanceof GeneralError) {
       return res.status(err.getStatusCode()).json(
         createErrorResponse({

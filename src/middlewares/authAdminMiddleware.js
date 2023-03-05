@@ -39,7 +39,7 @@ const authAdminMiddleware = async (req, res, next) => {
     });
 
     if (!targetUser) throw new ForbiddenError();
-    if (targetUser.role!="Admin") throw new ForbiddenError();
+    if (targetUser.role !== "admin") throw new ForbiddenError();
     /*
       we add the payload to the request object to mark as authenticated
     */

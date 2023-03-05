@@ -39,7 +39,7 @@ const authUserMiddleware = async (req, res, next) => {
     });
 
     if (!targetUser) throw new ForbiddenError();
-    if (targetUser.role!="Student") throw new ForbiddenError();
+    if (targetUser.role !== "student") throw new ForbiddenError();
     /*
       we add the payload to the request object to mark as authenticated
     */
