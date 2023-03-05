@@ -9,6 +9,7 @@ import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import { notFoundController } from "./controllers/routes/notFoundController.js";
 import { questionRoutes } from "./routes/api/v1/questions/index.js";
 import { userRoutes } from "./routes/api/v1/users/index.js";
+import { notificationRoutes } from "./routes/api/v1/notifications/index.js";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/userListFile", userListFileRoutes);
 app.use("/api/v1/questions", questionRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
 
 app.use("*", notFoundController);
 

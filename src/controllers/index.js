@@ -11,3 +11,4 @@ export * from "./users/index.js";
 export * from "./userTags/index.js";
 export * from "./questionTags/index.js";
 export * from "./userQuestions/index.js";
+export * from "./notifications/index.js";
