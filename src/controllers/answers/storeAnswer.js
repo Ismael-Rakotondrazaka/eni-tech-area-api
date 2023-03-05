@@ -59,7 +59,6 @@ const storeAnswer = async (req, res, next) => {
         content,
       };
 
-      // TODO send notification
       const notification = await Notification.create({
         userId: questionOwner.id,
         content: JSON.stringify(notificationContent),
