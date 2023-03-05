@@ -12,4 +12,3 @@ export * from "./userTagResource.js";
 export * from "./questionTagCollection.js";
 export * from "./questionTagResource.js";
 export * from "./userCollection.js";
-export * from "./questionCollection.js";
