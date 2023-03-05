@@ -8,3 +8,5 @@ export * from "./voteResource.js";
 export * from "./voteCollection.js";
 export * from "./userTagCollection.js";
 export * from "./userTagResource.js";
+export * from "./questionTagCollection.js";
+export * from "./questionTagResource.js";

@@ -12,6 +12,7 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.QuestionTag.belongsTo(models.Question, {
+        as: "QuestionTag",
         foreignKey: "questionId",
       });
     }
