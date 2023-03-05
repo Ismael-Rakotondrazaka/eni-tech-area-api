@@ -5,6 +5,7 @@ import {
   googleRegister,
   localLogin,
   googleLogin,
+  resetPassword,
 } from "../../../../controllers/index.js";
 import { authMiddleware } from "../../../../middlewares/authMiddleware.js";
 
@@ -15,5 +16,6 @@ authRoutes.post("/register/google", googleRegister);
 authRoutes.post("/login/local", localLogin);
 authRoutes.post("/login/google", googleLogin);
 authRoutes.get("/whoami", authMiddleware, whoami);
+authRoutes.post("/resetpassword", authMiddleware, resetPassword);
 
 export { authRoutes };
