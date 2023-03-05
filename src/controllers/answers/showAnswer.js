@@ -32,7 +32,12 @@ const showAnswer = async (req, res, next) => {
 
     if (!targetQuestion) throw new NotFoundError();
 
-    const targetAnswer = await Answer.findByPk(+answerId);
+    const targetAnswer = await Answer.findOne({
+      where: {
+        id: +answerId,
+        questionId: +questionId,
+      },
+    });
 
     if (!targetAnswer) throw new NotFoundError();
 
