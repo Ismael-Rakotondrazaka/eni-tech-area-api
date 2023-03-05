@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  destroyUserTag,
   indexUserTag,
   storeUserTag,
 } from "../../../../../controllers/index.js";
@@ -11,5 +12,6 @@ const userTagRoutes = Router({
 
 userTagRoutes.get("/", authMiddleware, indexUserTag);
 userTagRoutes.post("/", authMiddleware, storeUserTag);
+userTagRoutes.delete("/", authMiddleware, destroyUserTag);
 
 export { userTagRoutes };
