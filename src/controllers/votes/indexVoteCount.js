@@ -15,7 +15,6 @@ const indexVoteCount = async (req, res, next) => {
         message: "Credential doesn't match to our records.",
         code: "E5_1",
       });
-    console.log("here");
 
     if (!/^\d+$/.test(questionId) || !/^\d+$/.test(answerId))
       throw new NotFoundError();
