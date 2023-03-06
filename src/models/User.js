@@ -32,6 +32,10 @@ export default (sequelize, DataTypes) => {
       models.User.hasMany(models.Comment, {
         foreignKey: "userId",
       });
+
+      models.User.hasMany(models.Challenge, {
+        foreignKey: "userId",
+      })
     }
   }
   User.init(

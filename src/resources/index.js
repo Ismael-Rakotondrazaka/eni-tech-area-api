@@ -14,3 +14,7 @@ export * from "./questionTagResource.js";
 export * from "./userCollection.js";
 export * from "./notificationCollection.js";
 export * from "./notificationResource.js";
+export * from "./challengeCollection.js";
+export * from "./challengeResource.js";
+export * from "./challengeAnswerCollection.js";
+export * from "./challengeAnswerResource.js";
