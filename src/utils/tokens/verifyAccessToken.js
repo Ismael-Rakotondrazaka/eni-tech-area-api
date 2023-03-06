@@ -4,8 +4,8 @@ dotenv.config();
 
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-const decodeAccessToken = (accessToken) => {
+const verifyAccessToken = (accessToken) => {
   return verify(accessToken, accessTokenSecret);
 };
 
-export { decodeAccessToken };
+export { verifyAccessToken };

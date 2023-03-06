@@ -13,12 +13,22 @@ import {
   validatePassword,
   validatePasswordValidation,
   validateGender,
+  validateRole,
+  validateMatricula,
 } from "../../utils/index.js";
 
-const register = async (req, res, next) => {
+const localRegister = async (req, res, next) => {
   try {
-    let { firstName, lastName, email, password, passwordValidation, gender } =
-      req.body;
+    let {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordValidation,
+      gender,
+      role,
+      matricula,
+    } = req.body;
 
     const fieldsRequired = [
       {
@@ -45,6 +55,14 @@ const register = async (req, res, next) => {
         name: "gender",
         code: "E2_11",
       },
+      {
+        name: "matricula",
+        code: "E2_",
+      },
+      {
+        name: "role",
+        code: "E2_",
+      },
     ];
 
     for (const field of fieldsRequired) {
@@ -58,17 +76,32 @@ const register = async (req, res, next) => {
 
     email = validateEmail(email);
 
-    const duplicate = await User.count({
+    const duplicateByEmail = await User.count({
       where: {
         email,
       },
     });
 
-    if (duplicate !== 0)
+    if (duplicateByEmail !== 0)
       throw new ConflictError({
         message: "Email already used",
         code: "E4_1",
       });
+
+    const duplicateByMatricula = await User.count({
+      where: {
+        matricula,
+      },
+    });
+
+    if (duplicateByMatricula !== 0)
+      throw new ConflictError({
+        message: "Matricula already used",
+        code: "E4_2",
+      });
+
+    matricula = validateMatricula(matricula);
+    role = validateRole(role);
 
     firstName = validateFirstName(firstName);
     lastName = validateLastName(lastName);
@@ -87,10 +120,14 @@ const register = async (req, res, next) => {
       lastName,
       email,
       gender,
+      role,
+      matricula,
       provider: defaultLocalProviderName,
       password: hashedPassword,
       channelId: createRandomString(),
     });
+
+    await targetUser.reload();
 
     const targetUserResource = userResource(targetUser);
 
@@ -124,4 +161,4 @@ const register = async (req, res, next) => {
   }
 };
 
-export { register };
+export { localRegister };

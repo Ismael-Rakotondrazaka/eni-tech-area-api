@@ -161,6 +161,7 @@ Unique code of the Error\
 | E2_17  | lastName is not a string                     |
 | E2_18  | lastName is an empty string                  |
 | E2_19  | passwordValidation is different of password  |
+| E2_20  | token is missing                             |
 | **E3** | NotFoundError                                |
 | E3_1   | Resource not found                           |
 | E3_2   | Page or route not found                      |

@@ -1,7 +1,7 @@
 import { User } from "../models/index.js";
 import { ForbiddenError } from "../utils/errors/index.js";
 
-import { decodeAccessToken } from "../utils/index.js";
+import { verifyAccessToken } from "../utils/index.js";
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -14,7 +14,7 @@ const authMiddleware = async (req, res, next) => {
 
     if (!token) throw new ForbiddenError();
 
-    const decoded = decodeAccessToken(token);
+    const decoded = verifyAccessToken(token);
 
     if (
       decoded == null ||

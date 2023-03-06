@@ -9,6 +9,7 @@ import { createErrorResponse } from "../utils/responses/index.js";
 
 const errorMiddleware = (err, req, res, next) => {
   if (err) {
+    console.log(err);
     if (err instanceof GeneralError) {
       return res.status(err.getStatusCode()).json(
         createErrorResponse({
@@ -17,7 +18,10 @@ const errorMiddleware = (err, req, res, next) => {
         })
       );
     } else if (err instanceof jwt.JsonWebTokenError) {
-      const unauthorizedError = new UnauthorizedError();
+      const unauthorizedError = new UnauthorizedError({
+        message: "Credential doesn't match to our records.",
+        code: "E5_1",
+      });
 
       return res.status(unauthorizedError.getStatusCode()).json(
         createErrorResponse({

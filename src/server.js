@@ -1,14 +1,26 @@
 import { app } from "./app.js";
 import { sequelize } from "./models/index.js";
 
-const port = 8001;
+import { socketIO } from "./services/socketIO/index.js";
+import http from "http";
+
+const port = process.env.PORT || 8001;
+const httpServer = http.createServer(app);
+
+socketIO.attach(httpServer, {
+  cors: {
+    origin: ["*"],
+    credentials: true,
+  },
+});
 
 sequelize
   .sync({
-    alter: true,
+    //force: true
+    // alter: true,
   })
   .then(() => {
-    app.listen(port, () => {
+    httpServer.listen(port, () => {
       // eslint-disable-next-line no-console
       console.log("listening on port " + port);
     });
