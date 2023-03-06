@@ -5,6 +5,7 @@ import {
   validateContent,
   UnauthorizedError,
   createDataResponse,
+  validateEndAt,
 } from "../../utils/index.js";
 
 const storeChallenge = async (req, res, next) => {
@@ -25,15 +26,17 @@ const storeChallenge = async (req, res, next) => {
         code: "E5_1",
       });
 
-    let { title, content } = req.body;
+    let { title, content, endAt } = req.body;
 
     title = validateTitle(title);
     content = validateContent(content);
+    endAt = validateEndAt(endAt);
 
     const targetChallenge = await Challenge.create({
       userId: authUser.id,
       title,
       content,
+      endAt,
     });
 
     await targetChallenge.reload();

@@ -16,6 +16,7 @@ socketIO.attach(httpServer, {
 
 sequelize
   .sync({
+    //force: true
     // alter: true,
   })
   .then(() => {
