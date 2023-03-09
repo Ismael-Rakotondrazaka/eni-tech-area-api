@@ -14,3 +14,4 @@ export * from "./userQuestions/index.js";
 export * from "./notifications/index.js";
 export * from "./challenge/index.js";
 export * from "./challengeAnswer/index.js";
+export * from "./events/index.js"

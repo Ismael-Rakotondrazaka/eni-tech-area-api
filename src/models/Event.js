@@ -38,7 +38,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      entAt: {
+      endAt: {
         type: DataTypes.DATE,
         allowNull: true,
       },
