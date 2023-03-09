@@ -6,10 +6,10 @@ import {
   ForbiddenError,
   createDataResponse,
   validateTag,
+  createColorsFromTagName,
 } from "../../utils/index.js";
 import { userTagCollection } from "../../resources/index.js";
 import { Op } from "sequelize";
-import tinycolor from "tinycolor2";
 
 const storeUserTag = async (req, res, next) => {
   try {
@@ -81,15 +81,12 @@ const storeUserTag = async (req, res, next) => {
 
     const newTags = await Tag.bulkCreate(
       tagsNameToCreate.map((name) => {
-        // TODO check famous techno colors
-
-        const bg = tinycolor.random();
-        const textColor = bg.isLight() ? "#000" : "#fff";
+        const colors = createColorsFromTagName(name);
 
         return {
           name,
-          bgColor: bg.toHexString(),
-          textColor,
+          bgColor: colors.bgColor,
+          textColor: colors.textColor,
         };
       })
     );

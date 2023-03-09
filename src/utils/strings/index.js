@@ -15,3 +15,4 @@ export * from "./validateMatricula.js";
 export * from "./validateRole.js";
 export * from "./validateVoteType.js";
 export * from "./validateEndAt.js";
+export * from "./createColorsFromTagName.js";
