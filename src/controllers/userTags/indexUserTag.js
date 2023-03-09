@@ -28,7 +28,7 @@ const indexUserTag = async (req, res, next) => {
 
     const targetUserTags = await UserTag.findAll({
       where: {
-        userId: authUser.id,
+        userId: targetUser.id,
       },
     });
 
