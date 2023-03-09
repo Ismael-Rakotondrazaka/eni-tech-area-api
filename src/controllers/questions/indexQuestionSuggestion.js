@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Question, User, QuestionTag } from "../../models/index.js";
+import { Question, User, Tag } from "../../models/index.js";
 import { questionCollection } from "../../resources/index.js";
 import { UnauthorizedError, createDataResponse } from "../../utils/index.js";
 
@@ -21,7 +21,9 @@ const indexQuestionSuggestion = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const targetTags = await authUser.getUserTags();
+    const targetTags = await authUser.getTags();
+
+    // console.log(targetTags);
 
     const targetQuestions = await Question.findAll({
       where: {
@@ -31,10 +33,10 @@ const indexQuestionSuggestion = async (req, res, next) => {
       },
       include: [
         {
-          model: QuestionTag,
+          model: Tag,
           where: {
-            tagName: {
-              [Op.in]: targetTags.map((tag) => tag.tagName),
+            name: {
+              [Op.in]: targetTags.map((tag) => tag.name),
             },
           },
         },
