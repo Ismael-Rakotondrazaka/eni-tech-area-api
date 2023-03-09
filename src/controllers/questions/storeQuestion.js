@@ -51,7 +51,7 @@ const storeQuestion = async (req, res, next) => {
     await QuestionTag.bulkCreate(
       tags.map((tag) => ({
         tagName: tag,
-        userId: authUser.id,
+        questionId: targetQuestion.id,
       }))
     );
 
