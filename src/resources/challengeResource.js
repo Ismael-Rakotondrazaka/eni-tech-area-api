@@ -4,6 +4,7 @@ const challengeResource = (resource) => {
     title: resource.title,
     content: resource.content,
     userId: resource.userId,
+    endAt: resource.endAt,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt,
   };
