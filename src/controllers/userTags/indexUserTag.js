@@ -1,4 +1,4 @@
-import { User, UserTag } from "../../models/index.js";
+import { User } from "../../models/index.js";
 import { UnauthorizedError, NotFoundError } from "../../utils/errors/index.js";
 import { createDataResponse } from "../../utils/responses/index.js";
 import { userTagCollection } from "../../resources/index.js";
@@ -26,11 +26,7 @@ const indexUserTag = async (req, res, next) => {
 
     if (!targetUser) throw new NotFoundError();
 
-    const targetUserTags = await UserTag.findAll({
-      where: {
-        userId: targetUser.id,
-      },
-    });
+    const targetUserTags = await targetUser.getTags();
 
     const targetUserTagsResource = userTagCollection(targetUserTags);
 
