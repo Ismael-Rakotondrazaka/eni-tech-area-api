@@ -2,7 +2,7 @@
 import { Model } from "sequelize";
 
 export default (sequelize, DataTypes) => {
-  class Challenge extends Model {
+  class ChallengeTag extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,21 +11,13 @@ export default (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
-      models.Challenge.hasMany(models.ChallengeAnswer, {
+      models.ChallengeTag.belongsTo(models.Challenge, {
+        as: "ChallengeTag",
         foreignKey: "challengeId",
-      });
-
-      models.Question.hasMany(models.ChallengeTag, {
-        foreignKey: "challengeId",
-      });
-
-      models.Challenge.belongsTo(models.User, {
-        foreignKey: "userId",
       });
     }
   }
-
-  Challenge.init(
+  ChallengeTag.init(
     {
       id: {
         allowNull: false,
@@ -33,33 +25,26 @@ export default (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER,
       },
-      userId: {
+      challengeId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "users",
+          model: "questions",
           key: "id",
         },
-      },
-      title: {
-        type: DataTypes.TEXT,
-        required: true,
-      },
-      content: {
-        type: DataTypes.TEXT,
         allowNull: false,
       },
-      endAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
+      tagName: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "Challenge",
-      tableName: "challenges",
+      modelName: "ChallengeTag",
+      tableName: "challengeTags",
       timestamps: true,
     }
   );
 
-  return Challenge;
+  return ChallengeTag;
 };
