@@ -31,6 +31,7 @@ export default (sequelize, DataTypes) => {
           model: "questions",
           key: "id",
         },
+        allowNull: false,
       },
       tagName: {
         type: DataTypes.STRING,
