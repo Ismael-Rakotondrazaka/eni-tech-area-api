@@ -5,7 +5,7 @@ import {
   indexChallenge,
 } from "../../../../controllers/index.js";
 import { authMiddleware } from "../../../../middlewares/index.js";
-import { challengeAnswerRoutes } from "./challengeAnswer/index.js";
+import { challengeAnswerRoutes } from "./challengeanswers/index.js";
 
 const challengeRoutes = Router();
 
