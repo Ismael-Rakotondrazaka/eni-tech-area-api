@@ -17,6 +17,13 @@ export default (sequelize, DataTypes) => {
         foreignKey: "tagId",
         otherKey: "userId",
       });
+
+      models.Tag.belongsToMany(models.Question, {
+        through: models.QuestionTag,
+        // as: "UserQuestionTag",
+        foreignKey: "tagId",
+        otherKey: "questionId",
+      });
     }
   }
   Tag.init(

@@ -11,10 +11,6 @@ export default (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
-      models.QuestionTag.belongsTo(models.Question, {
-        as: "QuestionTag",
-        foreignKey: "questionId",
-      });
     }
   }
   QuestionTag.init(
@@ -33,8 +29,12 @@ export default (sequelize, DataTypes) => {
         },
         allowNull: false,
       },
-      tagName: {
-        type: DataTypes.STRING,
+      tagId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "tags",
+          key: "id",
+        },
         allowNull: false,
       },
     },

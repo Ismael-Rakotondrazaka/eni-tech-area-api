@@ -11,6 +11,7 @@ export default (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
+      models.Vote.belongsTo(models.Answer);
     }
   }
 
