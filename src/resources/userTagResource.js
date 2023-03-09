@@ -1,11 +1,13 @@
 const userTagResource = (resource) => {
   return {
-    id: resource.id,
     userId: resource.userId,
-    tagName: resource.tagName,
-    score: resource.score,
-    createdAt: resource.createdAt,
-    updatedAt: resource.updatedAt,
+    name: resource.name,
+    bgColor: resource.bgColor,
+    textColor: resource.textColor,
+    questionScore: resource.UserTag.questionScore,
+    challengeScore: resource.UserTag.challengeScore,
+    createdAt: resource.UserTag.createdAt,
+    updatedAt: resource.UserTag.updatedAt,
   };
 };
 

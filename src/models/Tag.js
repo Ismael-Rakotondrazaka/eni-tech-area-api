@@ -2,7 +2,7 @@
 import { Model } from "sequelize";
 
 export default (sequelize, DataTypes) => {
-  class UserTag extends Model {
+  class Tag extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,9 +11,15 @@ export default (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
+      models.Tag.belongsToMany(models.User, {
+        through: models.UserTag,
+        // as: "UserQuestionTag",
+        foreignKey: "tagId",
+        otherKey: "userId",
+      });
     }
   }
-  UserTag.init(
+  Tag.init(
     {
       id: {
         allowNull: false,
@@ -21,39 +27,26 @@ export default (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER,
       },
-      userId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "users",
-          key: "id",
-        },
-      },
-      tagId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "tags",
-          key: "id",
-        },
+      name: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
-      questionScore: {
-        type: DataTypes.INTEGER,
+      bgColor: {
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0,
       },
-      challengeScore: {
-        type: DataTypes.INTEGER,
+      textColor: {
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0,
       },
     },
     {
       sequelize,
-      modelName: "UserTag",
-      tableName: "userTags",
+      modelName: "Tag",
+      tableName: "tags",
       timestamps: true,
     }
   );
 
-  return UserTag;
+  return Tag;
 };
