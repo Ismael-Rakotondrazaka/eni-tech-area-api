@@ -6,6 +6,7 @@ import {
   NotFoundError,
   validateVoteType,
 } from "../../utils/index.js";
+import { questionConfig } from "../../configs/index.js";
 import { Op } from "sequelize";
 
 const storeVote = async (req, res, next) => {
@@ -97,7 +98,7 @@ const storeVote = async (req, res, next) => {
       },
     });
 
-    const votePoint = 1;
+    const votePoint = questionConfig.DEFAULT_SUCCESS_ANSWER_POINT;
 
     // TODO notify the answerer
     if (voteChangeType === "store") {
