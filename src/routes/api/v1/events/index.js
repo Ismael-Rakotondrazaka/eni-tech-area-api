@@ -7,6 +7,6 @@ const eventRoutes = Router();
 
 eventRoutes.get("/", authMiddleware, indexEvent);
 eventRoutes.get("/:eventId", authMiddleware, showEvent);
-eventRoutes.post('/',authMiddleware ,storeEvent);
+eventRoutes.post("/", authMiddleware, storeEvent);
 
-export { eventRoutes }
+export { eventRoutes };

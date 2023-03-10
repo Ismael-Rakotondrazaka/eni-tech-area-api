@@ -6,9 +6,7 @@ import {
   validateTitle,
   validateContent,
   UnauthorizedError,
-  BadRequestError,
   createDataResponse,
-  validateTag,
 } from "../../utils/index.js";
 import { validateEventIntervale } from "../../utils/strings/validateEventIntervale.js";
 
@@ -35,10 +33,8 @@ const storeEvent = async (req, res, next) => {
     title = validateTitle(title);
     content = validateContent(content);
     const date = validateEventIntervale(startAt, endAt);
-    console.log(date)
     startAt = date.startAt;
     endAt = date.endAt;
-
 
     const eventNotificationType = "event";
 
@@ -48,7 +44,7 @@ const storeEvent = async (req, res, next) => {
       content,
       startAt,
       endAt,
-      image
+      image,
     });
 
     await targetEvent.reload();
@@ -64,27 +60,28 @@ const storeEvent = async (req, res, next) => {
     const userids = await User.findAll({ attributes: ["id", "channelId"] });
 
     const userIdChannelId = {};
-    userids.forEach(user => {
-      userIdChannelId[user.id] = user.channelId
-    })
+    userids.forEach((user) => {
+      userIdChannelId[user.id] = user.channelId;
+    });
 
     const notification = await Notification.bulkCreate(
       userids.map((user) => ({
         userId: user.id,
-        content: notificationString
+        content: notificationString,
       }))
     );
 
-    notification.map((notif) => {
+    notification.forEach((notif) => {
       const notifResource = notificationResource(notif);
 
       const data = {
         notification: notifResource,
       };
 
-      socketIO.to(userIdChannelId[notifResource.userId]).emit("notifications:store", data);
-    })
-
+      socketIO
+        .to(userIdChannelId[notifResource.userId])
+        .emit("notifications:store", data);
+    });
 
     const targetEventResource = eventResource(targetEvent);
 

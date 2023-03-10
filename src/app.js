@@ -36,8 +36,8 @@ app.use("/api/v1/questions", questionRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/challenges", challengeRoutes);
-//todo need to test
-app.use("/api/v1/events",eventRoutes);
+// todo need to test
+app.use("/api/v1/events", eventRoutes);
 
 app.use("*", notFoundController);
 
