@@ -1,10 +1,12 @@
 import { Router } from "express";
 
-import { storeEvent } from "../../../../controllers/index.js";
+import { storeEvent, indexEvent, showEvent } from "../../../../controllers/index.js";
 import { authMiddleware } from "../../../../middlewares/authMiddleware.js";
 
-const EventRouter = Router();
+const eventRoutes = Router();
 
-EventRouter.post('/',authMiddleware ,storeEvent);
+eventRoutes.get("/", authMiddleware, indexEvent);
+eventRoutes.get("/:eventId", authMiddleware, showEvent);
+eventRoutes.post('/',authMiddleware ,storeEvent);
 
-export { EventRouter }
+export { eventRoutes }

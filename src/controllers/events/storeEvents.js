@@ -8,6 +8,7 @@ import {
   createDataResponse,
   validateTag,
 } from "../../utils/index.js";
+import { validateEventIntervale } from "../../utils/strings/validateEventIntervale.js";
 
 const storeEvent = async (req, res, next) => {
   try {
@@ -31,6 +32,10 @@ const storeEvent = async (req, res, next) => {
 
     title = validateTitle(title);
     content = validateContent(content);
+    const date = validateEventIntervale(startAt, endAt);
+    console.log(date)
+    startAt= date.startAt;
+    endAt= date.endAt;
 
 
   
