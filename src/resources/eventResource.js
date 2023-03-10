@@ -6,7 +6,7 @@ const eventResource = (resource) => {
     userId: resource.userId,
     startAt: resource.startAt,
     endAt: resource.endAt,
-    image: resource.image,
+    images: resource.images,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt,
   };
