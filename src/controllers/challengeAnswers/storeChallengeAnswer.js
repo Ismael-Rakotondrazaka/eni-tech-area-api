@@ -17,6 +17,7 @@ import {
   NotFoundError,
   BadRequestError,
 } from "../../utils/index.js";
+import { challengeConfig } from "../../configs/index.js";
 
 const storeChallengeAnswer = async (req, res, next) => {
   try {
@@ -70,7 +71,7 @@ const storeChallengeAnswer = async (req, res, next) => {
       userId: authUser.id,
       challengeId: targetChallenge.id,
       content,
-      status: "pending",
+      status: challengeConfig.DEFAULT_CHALLENGE_STATUS,
     });
 
     await targetChallengeAnswer.reload();
