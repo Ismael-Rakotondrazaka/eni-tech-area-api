@@ -1,5 +1,7 @@
 import { Event, User } from "../../models/index.js";
 import { eventResource } from "../../resources/eventResource.js";
+import { notificationResource } from "../../resources/notificationResource.js";
+import { socketIO } from "../../services/socketIO/index.js";
 import {
   validateTitle,
   validateContent,
@@ -34,11 +36,11 @@ const storeEvent = async (req, res, next) => {
     content = validateContent(content);
     const date = validateEventIntervale(startAt, endAt);
     console.log(date)
-    startAt= date.startAt;
-    endAt= date.endAt;
+    startAt = date.startAt;
+    endAt = date.endAt;
 
 
-  
+    const eventNotificationType = "event";
 
     const targetEvent = await Event.create({
       userId: authUser.id,
@@ -51,12 +53,39 @@ const storeEvent = async (req, res, next) => {
 
     await targetEvent.reload();
 
-    /*await QuestionTag.bulkCreate(
-      tags.map((tag) => ({
-        tagName: tag,
-        questionId: targetQuestion.id,
+    const notificationContent = {
+      type: eventNotificationType,
+      eventId: targetEvent.id,
+      content,
+    };
+
+    const notificationString = JSON.stringify(notificationContent);
+
+    const userids = await User.findAll({ attributes: ["id", "channelId"] });
+
+    const userIdChannelId = {};
+    userids.forEach(user => {
+      userIdChannelId[user.id] = user.channelId
+    })
+
+    const notification = await Notification.bulkCreate(
+      userids.map((user) => ({
+        userId: user.id,
+        content: notificationString
       }))
-    ); */
+    );
+
+    notification.map((notif) => {
+      const notifResource = notificationResource(notif);
+
+      const data = {
+        notification: notifResource,
+      };
+
+      socketIO.to(userIdChannelId[notifResource.userId]).emit("notifications:store", data);
+    })
+
+
     const targetEventResource = eventResource(targetEvent);
 
     const data = {
