@@ -4,6 +4,7 @@ const challengeAnswerResource = (resource) => {
     userId: resource.userId,
     challengeId: resource.challengeId,
     content: resource.content,
+    status: resource.status,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt,
   };
