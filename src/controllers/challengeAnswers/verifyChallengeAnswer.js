@@ -91,8 +91,17 @@ const verifyChallengeAnswer = async (req, res, next) => {
       },
     });
 
-    // TODO modify, based on the difficulty
-    const answerPoint = 1;
+    const swappedChallengeDifficulty = {};
+    for (const [key, value] of Object.entries(
+      challengeConfig.CHALLENGE_DIFFICULTY
+    )) {
+      swappedChallengeDifficulty[value] = key;
+    }
+
+    const answerPoint =
+      challengeConfig.CHALLENGE_DIFFICULTY_POINT[
+        swappedChallengeDifficulty[targetChallenge.difficulty]
+      ];
 
     if (status === challengeConfig.CHALLENGE_STATUS_ITEM.SUCCESS) {
       await Promise.all(
@@ -102,7 +111,7 @@ const verifyChallengeAnswer = async (req, res, next) => {
           });
         })
       );
-    } else if (status === challengeConfig.CHALLENGE_STATUS_ITEM.SUCCESS) {
+    } else if (status === challengeConfig.CHALLENGE_STATUS_ITEM.FAILURE) {
       await Promise.all(
         answerOwnerUserTags.map(async (tagUser) => {
           const newScore = tagUser.challengeScore - answerPoint;
