@@ -1,4 +1,4 @@
-import { User, Challenge} from "../../models/index.js";
+import { User, Challenge } from "../../models/index.js";
 import { UnauthorizedError, NotFoundError } from "../../utils/errors/index.js";
 import { createDataResponse } from "../../utils/responses/index.js";
 import { challengeCollection } from "../../resources/index.js";

@@ -122,7 +122,7 @@ const storeVote = async (req, res, next) => {
         answerId: targetAnswer.id,
         answerBy: answerOwner.id,
         initiateBy: authUser.id,
-        voteType : type,
+        voteType: type,
       };
 
       const notification = await Notification.create({
@@ -137,8 +137,6 @@ const storeVote = async (req, res, next) => {
       };
 
       socketIO.to(answerOwner.channelId).emit("notifications:store", data);
-
-
     } else if (voteChangeType === "delete") {
       await Promise.all(
         targetUserTags.map(async (tag) => {
