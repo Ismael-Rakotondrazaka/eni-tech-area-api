@@ -12,5 +12,5 @@ export * from "./userTags/index.js";
 export * from "./questionTags/index.js";
 export * from "./userQuestions/index.js";
 export * from "./notifications/index.js";
-export * from "./challenge/index.js";
-export * from "./challengeAnswer/index.js";
+export * from "./challenges/index.js";
+export * from "./challengeAnswers/index.js";
