@@ -112,11 +112,11 @@ const storeVote = async (req, res, next) => {
     } else if (voteChangeType === "delete") {
       await Promise.all(
         targetUserTags.map(async (tag) => {
-          if (tag.questionScore > 0) {
-            await tag.update({
-              questionScore: tag.questionScore - votePoint,
-            });
-          }
+          const newScore = tag.questionScore - votePoint;
+
+          await tag.update({
+            questionScore: newScore > 0 ? newScore : 0,
+          });
         })
       );
     }
