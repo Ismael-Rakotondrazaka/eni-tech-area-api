@@ -17,3 +17,6 @@ export * from "./validateVoteType.js";
 export * from "./validateChallengeEndAt.js";
 export * from "./createColorsFromTagName.js";
 export * from "./validateChallengeAnswerStatus.js";
+export * from "./validateChallengeDifficulty.js";
+export * from "./validateChallengeAnswer.js";
+export * from "./validateChallengeQuestion.js";

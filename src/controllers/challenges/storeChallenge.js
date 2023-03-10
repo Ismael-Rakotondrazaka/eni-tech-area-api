@@ -2,13 +2,15 @@ import { Challenge, User, ChallengeTag, Tag } from "../../models/index.js";
 import { challengeResource } from "../../resources/index.js";
 import {
   validateTitle,
-  validateContent,
+  validateChallengeQuestion,
+  validateChallengeAnswer,
   UnauthorizedError,
   BadRequestError,
   createDataResponse,
   validateChallengeEndAt,
   validateTag,
   createColorsFromTagName,
+  validateChallengeDifficulty,
 } from "../../utils/index.js";
 import { Op } from "sequelize";
 
@@ -30,11 +32,13 @@ const storeChallenge = async (req, res, next) => {
         code: "E5_1",
       });
 
-    let { title, content, endAt, tags } = req.body;
+    let { title, question, answer, endAt, difficulty, tags } = req.body;
 
     title = validateTitle(title);
-    content = validateContent(content);
+    question = validateChallengeQuestion(question);
+    answer = validateChallengeAnswer(answer);
     endAt = validateChallengeEndAt(endAt);
+    difficulty = validateChallengeDifficulty(difficulty);
 
     if (!Array.isArray(tags))
       throw new BadRequestError({
@@ -47,8 +51,10 @@ const storeChallenge = async (req, res, next) => {
     const targetChallenge = await Challenge.create({
       userId: authUser.id,
       title,
-      content,
+      question,
+      answer,
       endAt,
+      difficulty,
     });
 
     await targetChallenge.reload();

@@ -59,6 +59,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      difficulty: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       endAt: {
         type: DataTypes.DATE,
         allowNull: true,
