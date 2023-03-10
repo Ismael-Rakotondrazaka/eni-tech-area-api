@@ -33,8 +33,12 @@ export default (sequelize, DataTypes) => {
         },
         allowNull: false,
       },
-      tagName: {
-        type: DataTypes.STRING,
+      tagId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "tags",
+          key: "id",
+        },
         allowNull: false,
       },
     },

@@ -22,6 +22,13 @@ export default (sequelize, DataTypes) => {
       models.Challenge.belongsTo(models.User, {
         foreignKey: "userId",
       });
+
+      models.Challenge.belongsToMany(models.Tag, {
+        through: models.ChallengeTag,
+        // as: "UserQuestionTag",
+        foreignKey: "questionId",
+        otherKey: "tagId",
+      });
     }
   }
 
