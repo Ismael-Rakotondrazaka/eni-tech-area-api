@@ -13,6 +13,7 @@ import {
   validateChallengeAnswerStatus,
   ConflictError,
 } from "../../utils/index.js";
+import { challengeConfig } from "../../configs/index.js";
 
 import { Op } from "sequelize";
 
@@ -66,7 +67,7 @@ const verifyChallengeAnswer = async (req, res, next) => {
         code: "E6_",
       });
 
-    if (targetAnswer.status !== "pending")
+    if (targetAnswer.status !== challengeConfig.DEFAULT_CHALLENGE_STATUS)
       throw new ConflictError({
         message: "challenge answer is already verified",
         code: "E4_",
@@ -90,10 +91,19 @@ const verifyChallengeAnswer = async (req, res, next) => {
       },
     });
 
-    // TODO modify, based on the difficulty
-    const answerPoint = 1;
+    const swappedChallengeDifficulty = {};
+    for (const [key, value] of Object.entries(
+      challengeConfig.CHALLENGE_DIFFICULTY
+    )) {
+      swappedChallengeDifficulty[value] = key;
+    }
 
-    if (status === "success") {
+    const answerPoint =
+      challengeConfig.CHALLENGE_DIFFICULTY_POINT[
+        swappedChallengeDifficulty[targetChallenge.difficulty]
+      ];
+
+    if (status === challengeConfig.CHALLENGE_STATUS_ITEM.SUCCESS) {
       await Promise.all(
         answerOwnerUserTags.map(async (tagUser) => {
           await tagUser.update({
@@ -101,7 +111,7 @@ const verifyChallengeAnswer = async (req, res, next) => {
           });
         })
       );
-    } else if (status === "failure") {
+    } else if (status === challengeConfig.CHALLENGE_STATUS_ITEM.FAILURE) {
       await Promise.all(
         answerOwnerUserTags.map(async (tagUser) => {
           const newScore = tagUser.challengeScore - answerPoint;
