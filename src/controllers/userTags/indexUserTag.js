@@ -29,17 +29,17 @@ const indexUserTag = async (req, res, next) => {
 
     const targetUserTags = await targetUser.getTags();
 
-    const targetUserTagsCollection= userTagCollection(targetUserTags);
-    
+    const targetUserTagsCollection = userTagCollection(targetUserTags);
+
     const data = {
-      tags: targetUserTagsCollection.map((userTag)=>{
-        let questionBadge= createBadge(userTag.questionScore);
-        let challengeBadge= createBadge(userTag.challengeScore);
+      tags: targetUserTagsCollection.map((userTag) => {
+        const questionBadge = createBadge(userTag.questionScore);
+        const challengeBadge = createBadge(userTag.challengeScore);
         return {
           ...userTag,
           questionBadge,
           challengeBadge
-        }
+        };
       }),
     };
 
