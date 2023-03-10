@@ -32,7 +32,18 @@ const showChallenge = async (req, res, next) => {
 
     if (!targetChallenge) throw new NotFoundError();
 
+    const challengeOwner = await User.findByPk(targetChallenge.userId);
+
+    if (!challengeOwner) throw new NotFoundError();
+
     const targetChallengeResource = challengeResource(targetChallenge);
+
+    if (
+      challengeOwner.id !== authUser.id &&
+      targetChallenge.endAt.getTime() > Date.now()
+    ) {
+      targetChallengeResource.answer = null;
+    }
 
     const data = {
       challenge: targetChallengeResource,
