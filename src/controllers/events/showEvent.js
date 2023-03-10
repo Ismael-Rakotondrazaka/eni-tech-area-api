@@ -26,7 +26,7 @@ const showEvent = async (req, res, next) => {
 
     const { eventId } = req.params;
 
-    if (!/\d+/.test(eventId)) throw new NotFoundError();
+    if (!/^\d+$/.test(eventId)) throw new NotFoundError();
 
     const targetEvent = await Event.findByPk(+eventId);
 
