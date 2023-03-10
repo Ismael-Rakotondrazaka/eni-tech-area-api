@@ -20,7 +20,7 @@ const showComment = async (req, res, next) => {
     if (
       !/^\d+$/.test(questionId) ||
       !/^\d+$/.test(answerId) ||
-      /^\d+$/.test(commentId)
+      !/^\d+$/.test(commentId)
     )
       throw new NotFoundError();
 

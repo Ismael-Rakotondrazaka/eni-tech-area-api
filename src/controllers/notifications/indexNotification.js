@@ -20,7 +20,9 @@ const indexNotification = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const targetNotifications = await authUser.getNotifications();
+    const targetNotifications = await authUser.getNotifications({
+      order: [["createdAt", "DESC"]],
+    });
 
     const targetNotificationsCollection =
       notificationCollection(targetNotifications);
