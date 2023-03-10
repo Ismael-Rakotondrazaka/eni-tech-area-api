@@ -1,16 +1,23 @@
-import { ChallengeAnswer, User } from "../../models/index.js";
+import { Challenge, ChallengeAnswer, User } from "../../models/index.js";
 import { challengeAnswerCollection } from "../../resources/index.js";
-import { UnauthorizedError, createDataResponse } from "../../utils/index.js";
+import {
+  UnauthorizedError,
+  createDataResponse,
+  NotFoundError,
+} from "../../utils/index.js";
 
 const indexChallengeAnswer = async (req, res, next) => {
   try {
     const authUserId = req.payload?.user?.id;
+    const { challengeId } = req.params;
 
     if (!authUserId)
       throw new UnauthorizedError({
         message: "Credential doesn't match to our records.",
         code: "E5_1",
       });
+
+    if (!/^\d+$/.test(challengeId)) throw new NotFoundError();
 
     const authUser = await User.findByPk(authUserId);
 
@@ -20,9 +27,29 @@ const indexChallengeAnswer = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const targetChallengeAnswer = await ChallengeAnswer.findAll();
+    const targetChallenge = await Challenge.findByPk(challengeId);
 
-    const targetChallengeAnswerCollection = challengeAnswerCollection(targetChallengeAnswer);
+    if (!targetChallenge) throw new NotFoundError();
+
+    // we mark pending responses to failure if the challenge reach his end
+    if (targetChallenge.endAt.getTime() <= Date.now()) {
+      await ChallengeAnswer.update(
+        {
+          status: "failure",
+        },
+        {
+          where: {
+            status: "pending",
+          },
+        }
+      );
+    }
+
+    const targetChallengeAnswers = await targetChallenge.getChallengeAnswers();
+
+    const targetChallengeAnswerCollection = challengeAnswerCollection(
+      targetChallengeAnswers
+    );
 
     const data = {
       challengeAnswers: targetChallengeAnswerCollection,
