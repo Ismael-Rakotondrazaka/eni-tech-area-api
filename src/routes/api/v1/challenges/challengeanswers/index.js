@@ -3,6 +3,7 @@ import {
   indexChallengeAnswer,
   storeChallengeAnswer,
   showChallengeAnswer,
+  verifyChallengeAnswer,
 } from "../../../../../controllers/index.js";
 import { authMiddleware } from "../../../../../middlewares/index.js";
 
@@ -16,6 +17,11 @@ challengeAnswerRoutes.get(
   "/:challengeAnswerId",
   authMiddleware,
   showChallengeAnswer
+);
+challengeAnswerRoutes.post(
+  "/:challengeAnswerId/verify",
+  authMiddleware,
+  verifyChallengeAnswer
 );
 
 export { challengeAnswerRoutes };
