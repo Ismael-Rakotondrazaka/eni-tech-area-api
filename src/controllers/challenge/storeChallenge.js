@@ -1,4 +1,4 @@
-import { Challenge, User, ChallengeTag } from "../../models/index.js";
+import { Challenge, User, ChallengeTag, Tag } from "../../models/index.js";
 import { challengeResource } from "../../resources/index.js";
 import {
   validateTitle,
@@ -6,9 +6,11 @@ import {
   UnauthorizedError,
   BadRequestError,
   createDataResponse,
-  validateEndAt,
+  validateChallengeEndAt,
   validateTag,
+  createColorsFromTagName,
 } from "../../utils/index.js";
+import { Op } from "sequelize";
 
 const storeChallenge = async (req, res, next) => {
   try {
@@ -32,7 +34,7 @@ const storeChallenge = async (req, res, next) => {
 
     title = validateTitle(title);
     content = validateContent(content);
-    endAt = validateEndAt(endAt);
+    endAt = validateChallengeEndAt(endAt);
 
     if (!Array.isArray(tags))
       throw new BadRequestError({
@@ -51,10 +53,41 @@ const storeChallenge = async (req, res, next) => {
 
     await targetChallenge.reload();
 
+    const existedTags = await Tag.findAll({
+      where: {
+        name: {
+          [Op.in]: [tags],
+        },
+      },
+    });
+    const existedTagsName = existedTags.map((existedTag) => existedTag.name);
+
+    const tagsNameToCreate = tags.filter(
+      (tag) => !existedTagsName.includes(tag)
+    );
+
+    const newTags = await Tag.bulkCreate(
+      tagsNameToCreate.map((name) => {
+        const colors = createColorsFromTagName(name);
+
+        return {
+          name,
+          bgColor: colors.bgColor,
+          textColor: colors.textColor,
+        };
+      })
+    );
+
+    await Promise.all(
+      newTags.map(async (tag) => {
+        await tag.reload();
+      })
+    );
+
     await ChallengeTag.bulkCreate(
-      tags.map((tag) => ({
-        tagName: tag,
+      existedTags.concat(newTags).map((tag) => ({
         challengeId: targetChallenge.id,
+        tagId: tag.id,
       }))
     );
 

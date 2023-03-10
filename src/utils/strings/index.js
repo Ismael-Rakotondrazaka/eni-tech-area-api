@@ -14,5 +14,5 @@ export * from "./validateTag.js";
 export * from "./validateMatricula.js";
 export * from "./validateRole.js";
 export * from "./validateVoteType.js";
-export * from "./validateEndAt.js";
+export * from "./validateChallengeEndAt.js";
 export * from "./createColorsFromTagName.js";

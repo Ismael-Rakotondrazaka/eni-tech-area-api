@@ -1,6 +1,6 @@
 import { BadRequestError } from "../errors/index.js";
 
-const validateEndAt = (endAt) => {
+const validateChallengeEndAt = (endAt) => {
   if (!endAt)
     throw new BadRequestError({
       message: "endAt is required.",
@@ -21,11 +21,11 @@ const validateEndAt = (endAt) => {
 
   if (toCompare.getTime() - now.getTime() < minTime)
     throw new BadRequestError({
-      message: "endAt must be in the future (15 min)",
+      message: "endAt must be in the future (15mn min)",
       code: "E2_",
     });
 
   return endAt;
 };
 
-export { validateEndAt };
+export { validateChallengeEndAt };
