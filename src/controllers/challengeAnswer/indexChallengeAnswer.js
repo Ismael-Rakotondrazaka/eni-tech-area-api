@@ -31,25 +31,37 @@ const indexChallengeAnswer = async (req, res, next) => {
 
     if (!targetChallenge) throw new NotFoundError();
 
+    const challengeOwner = await User.findByPk(targetChallenge.userId);
+
+    if (!challengeOwner) throw new NotFoundError();
+
     // we mark pending responses to failure if the challenge reach his end
-    if (targetChallenge.endAt.getTime() <= Date.now()) {
-      await ChallengeAnswer.update(
-        {
-          status: "failure",
-        },
-        {
-          where: {
-            status: "pending",
+
+    const isChallengeEnded = targetChallenge.endAt.getTime() <= Date.now();
+
+    let targetChallengeAnswerCollection = [];
+
+    if (isChallengeEnded || challengeOwner.id === authUser.id) {
+      if (isChallengeEnded) {
+        await ChallengeAnswer.update(
+          {
+            status: "failure",
           },
-        }
+          {
+            where: {
+              status: "pending",
+            },
+          }
+        );
+      }
+
+      const targetChallengeAnswers =
+        await targetChallenge.getChallengeAnswers();
+
+      targetChallengeAnswerCollection = challengeAnswerCollection(
+        targetChallengeAnswers
       );
     }
-
-    const targetChallengeAnswers = await targetChallenge.getChallengeAnswers();
-
-    const targetChallengeAnswerCollection = challengeAnswerCollection(
-      targetChallengeAnswers
-    );
 
     const data = {
       challengeAnswers: targetChallengeAnswerCollection,
