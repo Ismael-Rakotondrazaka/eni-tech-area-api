@@ -1,4 +1,9 @@
-import { Challenge, ChallengeAnswer, User } from "../../models/index.js";
+import {
+  Challenge,
+  ChallengeAnswer,
+  User,
+  UserTag,
+} from "../../models/index.js";
 import { challengeAnswerResource } from "../../resources/index.js";
 import {
   UnauthorizedError,
@@ -8,6 +13,8 @@ import {
   validateChallengeAnswerStatus,
   ConflictError,
 } from "../../utils/index.js";
+
+import { Op } from "sequelize";
 
 const verifyChallengeAnswer = async (req, res, next) => {
   try {
@@ -49,6 +56,10 @@ const verifyChallengeAnswer = async (req, res, next) => {
 
     if (!targetAnswer) throw new NotFoundError();
 
+    const answerOwner = await User.findByPk(targetAnswer.userId);
+
+    if (!answerOwner) throw new NotFoundError();
+
     if (challengeOwner.id !== authUser.id)
       throw new ForbiddenError({
         message: "Can not verify answers from a challenge that is not yours",
@@ -66,6 +77,40 @@ const verifyChallengeAnswer = async (req, res, next) => {
     await targetAnswer.update({
       status,
     });
+
+    const targetChallengeTags = await targetChallenge.getTags();
+    const targetChallengeTagsId = targetChallengeTags.map((tag) => tag.id);
+
+    const answerOwnerUserTags = await UserTag.findAll({
+      where: {
+        userId: answerOwner.id,
+        tagId: {
+          [Op.in]: targetChallengeTagsId,
+        },
+      },
+    });
+
+    // TODO modify, based on the difficulty
+    const answerPoint = 1;
+
+    if (status === "success") {
+      await Promise.all(
+        answerOwnerUserTags.map(async (tagUser) => {
+          await tagUser.update({
+            challengeScore: tagUser.challengeScore + answerPoint,
+          });
+        })
+      );
+    } else if (status === "failure") {
+      await Promise.all(
+        answerOwnerUserTags.map(async (tagUser) => {
+          const newScore = tagUser.challengeScore - answerPoint;
+          await tagUser.update({
+            challengeScore: newScore > 0 ? newScore : 0,
+          });
+        })
+      );
+    }
 
     const targetChallengeAnswerResource = challengeAnswerResource(targetAnswer);
 
