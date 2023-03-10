@@ -30,7 +30,7 @@ const indexQuestionTag = async (req, res, next) => {
 
     if (!targetQuestion) throw new NotFoundError();
 
-    const targetTags = await targetQuestion.getQuestionTags();
+    const targetTags = await targetQuestion.getTags();
 
     const targetTagsResource = questionTagCollection(targetTags);
 
