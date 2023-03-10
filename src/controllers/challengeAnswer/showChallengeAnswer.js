@@ -1,15 +1,15 @@
 import { Challenge, ChallengeAnswer, User } from "../../models/index.js";
-import { challengeAnswerCollection } from "../../resources/index.js";
+import { challengeAnswerResource } from "../../resources/index.js";
 import {
   UnauthorizedError,
   createDataResponse,
   NotFoundError,
 } from "../../utils/index.js";
 
-const indexChallengeAnswer = async (req, res, next) => {
+const showChallengeAnswer = async (req, res, next) => {
   try {
     const authUserId = req.payload?.user?.id;
-    const { challengeId } = req.params;
+    const { challengeId, challengeAnswerId } = req.params;
 
     if (!authUserId)
       throw new UnauthorizedError({
@@ -17,7 +17,8 @@ const indexChallengeAnswer = async (req, res, next) => {
         code: "E5_1",
       });
 
-    if (!/^\d+$/.test(challengeId)) throw new NotFoundError();
+    if (!/^\d+$/.test(challengeId) || !/^\d+$/.test(challengeAnswerId))
+      throw new NotFoundError();
 
     const authUser = await User.findByPk(authUserId);
 
@@ -35,13 +36,12 @@ const indexChallengeAnswer = async (req, res, next) => {
 
     if (!challengeOwner) throw new NotFoundError();
 
-    // we mark pending responses to failure if the challenge reach his end
-
     const isChallengeEnded = targetChallenge.endAt.getTime() <= Date.now();
 
-    let targetChallengeAnswerCollection = [];
+    let targetChallengeAnswerResource = null;
 
     if (isChallengeEnded || challengeOwner.id === authUser.id) {
+      // we mark pending responses to failure if the challenge reach his end
       if (isChallengeEnded) {
         await ChallengeAnswer.update(
           {
@@ -55,16 +55,24 @@ const indexChallengeAnswer = async (req, res, next) => {
         );
       }
 
-      const targetChallengeAnswers =
-        await targetChallenge.getChallengeAnswers();
+      const targetChallengeAnswer = await ChallengeAnswer.findOne({
+        where: {
+          id: challengeAnswerId,
+          challengeId: targetChallenge.id,
+        },
+      });
 
-      targetChallengeAnswerCollection = challengeAnswerCollection(
-        targetChallengeAnswers
-      );
+      if (targetChallengeAnswer) {
+        targetChallengeAnswerResource = challengeAnswerResource(
+          targetChallengeAnswer
+        );
+      }
     }
 
+    if (!targetChallengeAnswerResource) throw new NotFoundError();
+
     const data = {
-      challengeAnswers: targetChallengeAnswerCollection,
+      challengeAnswers: targetChallengeAnswerResource,
     };
 
     const dataResponse = createDataResponse({
@@ -78,4 +86,4 @@ const indexChallengeAnswer = async (req, res, next) => {
   }
 };
 
-export { indexChallengeAnswer };
+export { showChallengeAnswer };

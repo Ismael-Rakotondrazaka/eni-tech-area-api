@@ -36,7 +36,7 @@ export default (sequelize, DataTypes) => {
       challengeId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "challengeAnswers",
+          model: "challenges",
           key: "id",
         },
         allowNull: false,
