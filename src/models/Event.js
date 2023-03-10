@@ -30,7 +30,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      image: {
+      images: {
         type: DataTypes.TEXT,
         allowNull: true
       },

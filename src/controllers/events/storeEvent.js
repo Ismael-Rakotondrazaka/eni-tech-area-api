@@ -1,4 +1,4 @@
-import { Event, User } from "../../models/index.js";
+import { Event, User, Notification } from "../../models/index.js";
 import { eventResource } from "../../resources/eventResource.js";
 import { notificationResource } from "../../resources/notificationResource.js";
 import { socketIO } from "../../services/socketIO/index.js";
@@ -7,8 +7,8 @@ import {
   validateContent,
   UnauthorizedError,
   createDataResponse,
+  validateEventInterval,
 } from "../../utils/index.js";
-import { validateEventIntervale } from "../../utils/strings/validateEventIntervale.js";
 
 const storeEvent = async (req, res, next) => {
   try {
@@ -28,11 +28,11 @@ const storeEvent = async (req, res, next) => {
         code: "E5_1",
       });
 
-    let { title, content, startAt, endAt, image } = req.body;
+    let { title, content, startAt, endAt, images } = req.body;
 
     title = validateTitle(title);
     content = validateContent(content);
-    const date = validateEventIntervale(startAt, endAt);
+    const date = validateEventInterval(startAt, endAt);
     startAt = date.startAt;
     endAt = date.endAt;
 
@@ -44,7 +44,7 @@ const storeEvent = async (req, res, next) => {
       content,
       startAt,
       endAt,
-      image,
+      images,
     });
 
     await targetEvent.reload();

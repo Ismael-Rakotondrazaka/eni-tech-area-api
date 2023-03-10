@@ -20,3 +20,4 @@ export * from "./validateChallengeAnswerStatus.js";
 export * from "./validateChallengeDifficulty.js";
 export * from "./validateChallengeAnswer.js";
 export * from "./validateChallengeQuestion.js";
+export * from "./validateEventInterval.js";
