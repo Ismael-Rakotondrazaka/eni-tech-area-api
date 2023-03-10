@@ -5,6 +5,7 @@ import {
   createDataResponse,
   NotFoundError,
 } from "../../utils/index.js";
+import { challengeConfig } from "../../configs/index.js";
 
 const indexChallengeAnswer = async (req, res, next) => {
   try {
@@ -45,11 +46,11 @@ const indexChallengeAnswer = async (req, res, next) => {
       if (isChallengeEnded) {
         await ChallengeAnswer.update(
           {
-            status: "failure",
+            status: challengeConfig.CHALLENGE_STATUS_ITEM.FAILURE,
           },
           {
             where: {
-              status: "pending",
+              status: challengeConfig.CHALLENGE_STATUS_ITEM.PENDING,
             },
           }
         );

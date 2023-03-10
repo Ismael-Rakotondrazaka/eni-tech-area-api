@@ -1,15 +1,14 @@
 import { BadRequestError } from "../errors/index.js";
+import { challengeConfig } from "../../configs/index.js";
 
 const validateChallengeAnswerStatus = (status) => {
-  const validStatus = ["failure", "success"];
-
   if (typeof status !== "string")
     throw new BadRequestError({
       message: "status is not a string",
       code: "E2_",
     });
 
-  if (!validStatus.includes(status))
+  if (!challengeConfig.CHALLENGE_STATUS_CUSTOMIZABLE.includes(status))
     throw new BadRequestError({
       message: "status is not valid",
       code: "E2_",
