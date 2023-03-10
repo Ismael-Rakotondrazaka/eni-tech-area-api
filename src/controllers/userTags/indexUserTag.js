@@ -2,6 +2,7 @@ import { User } from "../../models/index.js";
 import { UnauthorizedError, NotFoundError } from "../../utils/errors/index.js";
 import { createDataResponse } from "../../utils/responses/index.js";
 import { userTagCollection } from "../../resources/index.js";
+import { createBadge } from "../../utils/strings/createBadge.js";
 
 const indexUserTag = async (req, res, next) => {
   try {
@@ -28,10 +29,18 @@ const indexUserTag = async (req, res, next) => {
 
     const targetUserTags = await targetUser.getTags();
 
-    const targetUserTagsResource = userTagCollection(targetUserTags);
-
+    const targetUserTagsCollection= userTagCollection(targetUserTags);
+    
     const data = {
-      tags: targetUserTagsResource,
+      tags: targetUserTagsCollection.map((userTag)=>{
+        let questionBadge= createBadge(userTag.questionScore);
+        let challengeBadge= createBadge(userTag.challengeScore);
+        return {
+          ...userTag,
+          questionBadge,
+          challengeBadge
+        }
+      }),
     };
 
     const dataResponse = createDataResponse({
