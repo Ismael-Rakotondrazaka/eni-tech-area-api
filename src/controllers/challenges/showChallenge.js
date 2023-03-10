@@ -26,7 +26,7 @@ const showChallenge = async (req, res, next) => {
 
     const { challengeId } = req.params;
 
-    if (!/\d+/.test(challengeId)) throw new NotFoundError();
+    if (!/^\d+$/.test(challengeId)) throw new NotFoundError();
 
     const targetChallenge = await Challenge.findByPk(+challengeId);
 
