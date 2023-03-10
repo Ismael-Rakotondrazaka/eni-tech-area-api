@@ -11,6 +11,7 @@ import { questionRoutes } from "./routes/api/v1/questions/index.js";
 import { userRoutes } from "./routes/api/v1/users/index.js";
 import { notificationRoutes } from "./routes/api/v1/notifications/index.js";
 import { challengeRoutes } from "./routes/api/v1/challenges/index.js";
+import { eventRoutes } from "./routes/api/v1/events/index.js";
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.use("/api/v1/questions", questionRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/challenges", challengeRoutes);
+// todo need to test
+app.use("/api/v1/events", eventRoutes);
 
 app.use("*", notFoundController);
 
