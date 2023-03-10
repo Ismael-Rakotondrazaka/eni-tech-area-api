@@ -11,10 +11,10 @@ export default (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
-      models.ChallengeTag.belongsTo(models.Challenge, {
-        as: "ChallengeTag",
-        foreignKey: "challengeId",
-      });
+      // models.ChallengeTag.belongsTo(models.Challenge, {
+      //   as: "ChallengeTag",
+      //   foreignKey: "challengeId",
+      // });
     }
   }
   ChallengeTag.init(
