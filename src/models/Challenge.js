@@ -51,9 +51,13 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         required: true,
       },
-      content: {
+      question: {
         type: DataTypes.TEXT,
         allowNull: false,
+      },
+      answer: {
+        type: DataTypes.TEXT,
+        allowNull: true,
       },
       endAt: {
         type: DataTypes.DATE,

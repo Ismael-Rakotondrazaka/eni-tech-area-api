@@ -24,8 +24,22 @@ const indexChallenge = async (req, res, next) => {
 
     const targetChallengeCollection = challengeCollection(targetChallenge);
 
+    const now = Date.now();
+
     const data = {
-      challenges: targetChallengeCollection,
+      challenges: targetChallengeCollection.map((challenge) => {
+        if (
+          challenge.userId !== authUser.id &&
+          challenge.endAt.getTime() > now
+        ) {
+          return {
+            ...challenge,
+            answer: null,
+          };
+        } else {
+          return challenge;
+        }
+      }),
     };
 
     const dataResponse = createDataResponse({
