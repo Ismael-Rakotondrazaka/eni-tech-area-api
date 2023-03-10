@@ -76,28 +76,28 @@ const storeChallengeAnswer = async (req, res, next) => {
     await targetChallengeAnswer.reload();
 
     // the user will receive the notification only when the ansewerer is not the owner of the question
-    if (challengeOwner.id !== authUser.id) {
-      const notificationContent = {
-        type: challengeAnswerNotificationType,
-        challengeId: targetChallenge.id,
-        challengeBy: challengeOwner.id,
-        initiateBy: authUser.id,
-        content,
-      };
+    const notificationContent = {
+      type: challengeAnswerNotificationType,
+      challengeId: targetChallenge.id,
+      challengeBy: challengeOwner.id,
+      initiateBy: authUser.id,
+      content,
+    };
 
-      const notification = await Notification.create({
-        userId: challengeOwner.id,
-        content: JSON.stringify(notificationContent),
-      });
+    const notification = await Notification.create({
+      userId: challengeOwner.id,
+      content: JSON.stringify(notificationContent),
+    });
 
-      const targetNotificationResource = notificationResource(notification);
+    const targetNotificationResource = notificationResource(notification);
 
-      const data = {
-        notification: targetNotificationResource,
-      };
+    const notificationData = {
+      notification: targetNotificationResource,
+    };
 
-      socketIO.to(challengeOwner.channelId).emit("notifications:store", data);
-    }
+    socketIO
+      .to(challengeOwner.channelId)
+      .emit("notifications:store", notificationData);
 
     const targetChallengeAnswerResource = challengeAnswerResource(
       targetChallengeAnswer
