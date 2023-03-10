@@ -1,4 +1,6 @@
 import { Answer, User, UserTag, Question, Vote } from "../../models/index.js";
+import { notificationResource } from "../../resources/notificationResource.js";
+import { socketIO } from "../../services/socketIO/index.js";
 import {
   UnauthorizedError,
   ForbiddenError,
@@ -108,6 +110,35 @@ const storeVote = async (req, res, next) => {
           });
         })
       );
+
+      const voteNotificationType = "vote";
+      const questionOwner = await User.findByPk(targetQuestion.userId);
+      const answerOwner = await User.findByPk(targetAnswer.userId);
+
+      const notificationContent = {
+        type: voteNotificationType,
+        questionId: targetQuestion.id,
+        questionBy: questionOwner.id,
+        answerId: targetAnswer.id,
+        answerBy: answerOwner.id,
+        initiateBy: authUser.id,
+        voteType : type,
+      };
+
+      const notification = await Notification.create({
+        userId: answerOwner.id,
+        content: JSON.stringify(notificationContent),
+      });
+
+      const targetNotificationResource = notificationResource(notification);
+
+      const data = {
+        notification: targetNotificationResource,
+      };
+
+      socketIO.to(answerOwner.channelId).emit("notifications:store", data);
+
+
     } else if (voteChangeType === "delete") {
       await Promise.all(
         targetUserTags.map(async (tag) => {
