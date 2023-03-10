@@ -1,4 +1,11 @@
-import { Answer, User, UserTag, Question, Vote } from "../../models/index.js";
+import {
+  Answer,
+  User,
+  UserTag,
+  Question,
+  Vote,
+  Notification,
+} from "../../models/index.js";
 import { notificationResource } from "../../resources/notificationResource.js";
 import { socketIO } from "../../services/socketIO/index.js";
 import {
@@ -104,6 +111,11 @@ const storeVote = async (req, res, next) => {
 
     // TODO notify the answerer
     if (voteChangeType === "store") {
+      const questionOwner = await User.findByPk(targetQuestion.userId);
+      const answerOwner = await User.findByPk(targetAnswer.userId);
+
+      if (!questionOwner || !answerOwner) throw new NotFoundError();
+
       await Promise.all(
         targetUserTags.map(async (tag) => {
           await tag.update({
@@ -113,8 +125,6 @@ const storeVote = async (req, res, next) => {
       );
 
       const voteNotificationType = "vote";
-      const questionOwner = await User.findByPk(targetQuestion.userId);
-      const answerOwner = await User.findByPk(targetAnswer.userId);
 
       const notificationContent = {
         type: voteNotificationType,
