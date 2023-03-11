@@ -21,7 +21,12 @@ const indexUser = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const targetUsers = await User.findAll();
+    const targetUsers = await User.findAll({
+      order: [
+        ["firstName", "ASC"],
+        ["lastName", "ASC"],
+      ],
+    });
 
     const targetUsersSource = userCollection(targetUsers);
 

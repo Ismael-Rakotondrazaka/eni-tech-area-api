@@ -23,8 +23,6 @@ const indexChallengeSuggestion = async (req, res, next) => {
 
     const targetTags = await authUser.getTags();
 
-    // console.log(targetTags);
-
     const targetChallenges = await Challenge.findAll({
       where: {
         userId: {
@@ -42,7 +40,12 @@ const indexChallengeSuggestion = async (req, res, next) => {
           required: true,
         },
       ],
+      order: [
+        ["createdAt", "DESC"],
+        ["endAt", "DESC"],
+      ],
     });
+
     const targetChallengeCollection = challengeCollection(targetChallenges);
 
     const now = Date.now();

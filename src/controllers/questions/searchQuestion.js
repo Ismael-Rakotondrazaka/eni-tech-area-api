@@ -41,6 +41,7 @@ const searchQuestion = async (req, res, next) => {
             [Op.substring]: title,
           },
         },
+        order: [["createdAt", "DESC"]],
       });
     } else if (content) {
       targetQuestions = await Question.findAll({
@@ -49,6 +50,7 @@ const searchQuestion = async (req, res, next) => {
             [Op.substring]: content,
           },
         },
+        order: [["createdAt", "DESC"]],
       });
     } else if (both) {
       targetQuestions = await Question.findAll({
@@ -66,6 +68,7 @@ const searchQuestion = async (req, res, next) => {
             },
           ],
         },
+        order: [["createdAt", "DESC"]],
       });
     } else {
       targetQuestions = await Question.findAll({
@@ -77,6 +80,7 @@ const searchQuestion = async (req, res, next) => {
             },
           },
         ],
+        order: [["createdAt", "DESC"]],
       });
     }
 

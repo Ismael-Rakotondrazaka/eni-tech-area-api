@@ -27,7 +27,9 @@ const indexUserTag = async (req, res, next) => {
 
     if (!targetUser) throw new NotFoundError();
 
-    const targetUserTags = await targetUser.getTags();
+    const targetUserTags = await targetUser.getTags({
+      order: [["name", "ASC"]],
+    });
 
     const targetUserTagsCollection = userTagCollection(targetUserTags);
 
@@ -38,7 +40,7 @@ const indexUserTag = async (req, res, next) => {
         return {
           ...userTag,
           questionBadge,
-          challengeBadge
+          challengeBadge,
         };
       }),
     };

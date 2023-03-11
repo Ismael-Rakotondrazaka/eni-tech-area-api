@@ -30,9 +30,11 @@ const indexUserChallenge = async (req, res, next) => {
       where: {
         userId: authUser.id,
       },
+      order: [["createdAt", "DESC"]],
     });
 
-    const targetUserChallengeResource = challengeCollection(targetUserChallenge);
+    const targetUserChallengeResource =
+      challengeCollection(targetUserChallenge);
 
     const data = {
       challenges: targetUserChallengeResource,

@@ -56,8 +56,9 @@ const indexChallengeAnswer = async (req, res, next) => {
         );
       }
 
-      const targetChallengeAnswers =
-        await targetChallenge.getChallengeAnswers();
+      const targetChallengeAnswers = await targetChallenge.getChallengeAnswers({
+        order: [["createdAt", "ASC"]],
+      });
 
       targetChallengeAnswerCollection = challengeAnswerCollection(
         targetChallengeAnswers

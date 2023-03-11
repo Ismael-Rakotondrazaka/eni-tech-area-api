@@ -30,7 +30,9 @@ const indexChallengeTag = async (req, res, next) => {
 
     if (!targetChallenge) throw new NotFoundError();
 
-    const targetChallengeTags = await targetChallenge.getTags();
+    const targetChallengeTags = await targetChallenge.getTags({
+      order: [["name", "ASC"]],
+    });
 
     const targetTagsResource = challengeTagCollection(targetChallengeTags);
 
