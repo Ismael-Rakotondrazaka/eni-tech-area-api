@@ -15,7 +15,7 @@ const validateLastName = (lastName) => {
       code: "E2_18",
     });
 
-  return trimmed.toUpperCase(); // make the lastName to uppercase
+  return trimmed; // make the lastName to uppercase
 };
 
 export { validateLastName };
