@@ -37,7 +37,10 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@dicebear/collection": "^5.3.4",
+    "@dicebear/core": "^5.3.4",
     "@eslint/create-config": "^0.4.2",
+    "@faker-js/faker": "^7.6.0",
     "eslint": "^8.0.1",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.25.2",
