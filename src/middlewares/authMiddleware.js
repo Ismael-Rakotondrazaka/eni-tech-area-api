@@ -25,6 +25,7 @@ const authMiddleware = async (req, res, next) => {
 
     const id = decoded?.user?.id;
     const email = decoded?.user?.email;
+    const role = decoded?.user?.role;
 
     if (!email || !id) throw new ForbiddenError();
 
@@ -32,8 +33,9 @@ const authMiddleware = async (req, res, next) => {
       where: {
         id,
         email,
+        role,
       },
-      attributes: ["id", "email"],
+      attributes: ["id", "email", "role"],
     });
 
     if (!targetUser) throw new ForbiddenError();
@@ -45,6 +47,7 @@ const authMiddleware = async (req, res, next) => {
       user: {
         id: targetUser.id,
         email: targetUser.email,
+        role: targetUser.role,
       },
     };
 
