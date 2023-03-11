@@ -20,7 +20,12 @@ const indexChallenge = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const targetChallenge = await Challenge.findAll();
+    const targetChallenge = await Challenge.findAll({
+      order: [
+        ["createdAt", "DESC"],
+        ["endAt", "DESC"],
+      ],
+    });
 
     const targetChallengeCollection = challengeCollection(targetChallenge);
 

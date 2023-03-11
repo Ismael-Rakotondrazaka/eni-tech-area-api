@@ -30,6 +30,7 @@ const indexUserQuestion = async (req, res, next) => {
       where: {
         userId: targetUser.id,
       },
+      order: [["createdAt", "DESC"]],
     });
 
     const targetUserQuestionResource = questionCollection(targetUserQuestion);

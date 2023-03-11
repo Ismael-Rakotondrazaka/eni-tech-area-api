@@ -20,7 +20,12 @@ const indexEvent = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const targetEvent = await Event.findAll();
+    const targetEvent = await Event.findAll({
+      order: [
+        ["startAt", "DESC"],
+        ["createdAt", "DESC"],
+      ],
+    });
 
     const targetEventCollection = eventCollection(targetEvent);
 

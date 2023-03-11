@@ -41,6 +41,7 @@ const indexQuestionSuggestion = async (req, res, next) => {
           },
         },
       ],
+      order: [["createdAt", "DESC"]],
     });
 
     const targetQuestionsCollection = questionCollection(targetQuestions);
