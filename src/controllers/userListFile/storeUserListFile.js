@@ -93,41 +93,115 @@ const storeUserListFile = async (req, res, next) => {
 
         const password = emailPassword[user.email];
 
-        const title = "Welcome to the ENI-OVERFLOW";
+        const title = "Welcome to ENI tech area";
 
-        const text = `Hi, ${user.name.full}.\nPlease read carefully.\nHere is your password: ${password}.\n We recommend you to change it in the link ${frontendURL}/?first=true&token=${accessToken}`;
+        const text = `Hi, ${user.name.full}.\nPlease read carefully.\nHere is your password: ${password}.\n We recommend you to change it in the link ${frontendURL}/login?first=true&token=${accessToken}`;
 
         await sendEmail({
           from: emailSender,
           to: user.email,
-          subject: "ENI-OVERFLOW",
+          subject: "ENI tech area",
           text: `Ecole Nationale d'Informatique
 
 ${title}
 
 ${text}`,
-          html: `<header style="padding:0 0.2rem">
-  <img style="display:block;width:40%;margin-bottom:0.5rem;max-width:200px;margin-left:auto;margin-right:auto;" src="https://api.dicebear.com/5.x/thumbs/svg" alt="Logo ENI"/>
-  
-  <h1 style="color:#000;text-align:center;font-height:bold;">Ecole Nationale d'Informatique</h1>
-</header>
-
-<hr />
-
-<main>
-
-<h1 style="font-height:bold;">${title}</h1>
-
-<h2>Hi ${user.name.full}</h2>
-
-<p>Please, read carefully</p>
-
-<p>Here is your password: <em>${password}</em></p>
-
-<p>We recommande you to change it in this link: <a href="${frontendURL}/?first=true&token=${accessToken}">${frontendURL}/?first=true&token=${accessToken}</a></p>
-
-</main>
-`,
+          html: `<body
+          style="
+            margin-left: auto;
+            width: 90%;
+            max-width: 1024px;
+            margin-right: auto;
+            font-family: sans-serif;
+          "
+        >
+          <header style="padding: 0 0.2rem">
+            <img
+              style="
+                display: block;
+                width: 40%;
+                margin-bottom: 0.5rem;
+                max-width: 200px;
+                margin-left: auto;
+                margin-right: auto;
+              "
+              src="https://storage.googleapis.com/mi-chat-storage.appspot.com/1678523987651.jpg"
+              alt="Logo ENI"
+            />
+        
+            <h1 style="color: #000; text-align: center; font-weight: bold">
+              Ecole Nationale d'Informatique
+            </h1>
+          </header>
+        
+          <hr />
+        
+          <main>
+            <h1 style="font-weight: bold">${title}</h1>
+        
+            <h2>Dear ${user.name.full},</h2>
+            <p>
+              We are delighted to welcome you to the ENI Tech Area platform. We are
+              thrilled that you have decided to join our community of learners, and we
+              are confident that this platform will provide you with an enriching
+              educational experience.
+            </p>
+        
+            <p>
+              We are pleased to inform you that your account has been successfully
+              created on the platform. <br />
+              Your default password is:
+              <em style="font-style: normal; font-weight: bold">${password}</em><br />
+              We would like to remind you to keep your password secure and not share it
+              with anyone. It is also advisable to change your password as soon as
+              possible to ensure the security of your account.
+            </p>
+        
+            <p>
+              To change your password, please click on the following link: <br />
+              <a
+                href="${frontendURL}/login?first=true&token=${accessToken}"
+                style="
+                  background-color: #01baef;
+                  padding: 1rem;
+                  display: inline-block;
+                  text-decoration: none;
+                  color: #fff;
+                  font-weight: bold;
+                  border-radius: 0.3rem;
+                  box-shadow: #000 0px 1px 2px;
+                  margin-top: 0.3rem;
+                  margin-bottom: 0.3rem;
+                "
+                >Change password</a
+              >
+              <br />
+              You will be prompted to enter your default password, and then you will be
+              able to set your new password.
+            </p>
+        
+            <p>
+              We encourage you to explore the platform and take advantage of the many
+              resources and tools available to you. We believe that this platform will
+              enhance your learning experience and provide you with the skills and
+              knowledge necessary to achieve your goals.
+            </p>
+        
+            <p>
+              If you have any questions or concerns, please do not hesitate to contact
+              us at [insert contact email].
+            </p>
+        
+            <p>
+              Thank you for joining our platform, and we look forward to supporting you
+              in your academic journey.
+            </p>
+        
+            <p>Best regards,</p>
+        
+            <p style="text-align: right">ENI Tech Area administrator</p>
+          </main>
+        </body>`,
         });
       })
     );
