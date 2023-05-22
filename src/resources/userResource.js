@@ -2,9 +2,9 @@ const userResource = (resource) => {
   return {
     id: resource.id,
     name: {
-      first: resource.firstName,
-      last: resource.lastName,
-      full: resource.fullName,
+      first: resource.firstname,
+      last: resource.lastname,
+      full: resource.fullname,
     },
     email: resource.email,
     role: resource.role,

@@ -8,35 +8,35 @@ import {
   createAccessToken,
   hashPassword,
   validateEmail,
-  validateFirstName,
-  validateLastName,
+  validateFirstname,
+  validateLastname,
   validatePassword,
-  validatePasswordValidation,
-  validateGender,
+  // validatePasswordValidation,
+  // validateGender,
   validateRole,
-  validateMatricula,
+  // validateMatricula,
 } from "../../utils/index.js";
 
 const localRegister = async (req, res, next) => {
   try {
     let {
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       email,
       password,
-      passwordValidation,
+      // passwordValidation,
       gender,
       role,
-      matricula,
+      // matricula,
     } = req.body;
 
     const fieldsRequired = [
       {
-        name: "firstName",
+        name: "firstname",
         code: "E2_1",
       },
       {
-        name: "lastName",
+        name: "lastname",
         code: "E2_2",
       },
       {
@@ -47,18 +47,18 @@ const localRegister = async (req, res, next) => {
         name: "password",
         code: "E2_4",
       },
-      {
-        name: "passwordValidation",
-        code: "E2_5",
-      },
-      {
-        name: "gender",
-        code: "E2_11",
-      },
-      {
-        name: "matricula",
-        code: "E2_",
-      },
+      // {
+      //   name: "passwordValidation",
+      //   code: "E2_5",
+      // },
+      // {
+      //   name: "gender",
+      //   code: "E2_11",
+      // },
+      // {
+      //   name: "matricula",
+      //   code: "E2_",
+      // },
       {
         name: "role",
         code: "E2_",
@@ -88,40 +88,40 @@ const localRegister = async (req, res, next) => {
         code: "E4_1",
       });
 
-    const duplicateByMatricula = await User.count({
-      where: {
-        matricula,
-      },
-    });
+    // const duplicateByMatricula = await User.count({
+    //   where: {
+    //     matricula,
+    //   },
+    // });
 
-    if (duplicateByMatricula !== 0)
-      throw new ConflictError({
-        message: "Matricula already used",
-        code: "E4_2",
-      });
+    // if (duplicateByMatricula !== 0)
+    //   throw new ConflictError({
+    //     message: "Matricula already used",
+    //     code: "E4_2",
+    //   });
 
-    matricula = validateMatricula(matricula);
+    // matricula = validateMatricula(matricula);
     role = validateRole(role);
 
-    firstName = validateFirstName(firstName);
-    lastName = validateLastName(lastName);
-    gender = validateGender(gender);
+    firstname = validateFirstname(firstname);
+    lastname = validateLastname(lastname);
+    // gender = validateGender(gender);
 
     validatePassword(password);
 
-    validatePasswordValidation(passwordValidation, password);
+    // validatePasswordValidation(passwordValidation, password);
 
     const hashedPassword = hashPassword(password);
 
     const defaultLocalProviderName = "local";
 
     const targetUser = await User.create({
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       email,
       gender,
       role,
-      matricula,
+      // matricula,
       provider: defaultLocalProviderName,
       password: hashedPassword,
       channelId: createRandomString(),

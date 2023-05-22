@@ -62,25 +62,25 @@ export default (sequelize, DataTypes) => {
       },
       matricula: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        unique: true,
+        allowNull: true, // We may not need it anymore because the app is used by anyone
+        // unique: true,
       },
-      firstName: {
+      firstname: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      lastName: {
+      lastname: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      fullName: {
+      fullname: {
         type: DataTypes.VIRTUAL,
         get() {
-          return `${this.firstName} ${this.lastName}`;
+          return `${this.firstname} ${this.lastname}`;
         },
         set() {
           throw new ServerError({
-            message: "Do not try to set the 'fullName' value.",
+            message: "Do not try to set the 'fullname' value.",
             isPrivate: true,
             code: "E1_2",
           });
@@ -88,7 +88,7 @@ export default (sequelize, DataTypes) => {
       },
       gender: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true, // We give to the user the ability to complete his profile later
       },
       email: {
         field: "email",
