@@ -22,3 +22,5 @@ export * from "./eventCollection.js";
 export * from "./eventResource.js";
 export * from "./challengeTagResource.js";
 export * from "./challengeTagCollection.js";
+export * from "./tagCollection.js";
+export * from "./tagResource.js";

@@ -11,24 +11,17 @@ import {
   validateFirstname,
   validateLastname,
   validatePassword,
-  // validatePasswordValidation,
-  // validateGender,
   validateRole,
-  // validateMatricula,
 } from "../../utils/index.js";
 
 const localRegister = async (req, res, next) => {
+  /**
+   * We are gonna add the user information later.
+   * But in the first registration, we only need
+   * the user to provide his firstname, lastname, email, password and gender
+   */
   try {
-    let {
-      firstname,
-      lastname,
-      email,
-      password,
-      // passwordValidation,
-      gender,
-      role,
-      // matricula,
-    } = req.body;
+    let { firstname, lastname, email, password, gender, role } = req.body;
 
     const fieldsRequired = [
       {
@@ -47,18 +40,6 @@ const localRegister = async (req, res, next) => {
         name: "password",
         code: "E2_4",
       },
-      // {
-      //   name: "passwordValidation",
-      //   code: "E2_5",
-      // },
-      // {
-      //   name: "gender",
-      //   code: "E2_11",
-      // },
-      // {
-      //   name: "matricula",
-      //   code: "E2_",
-      // },
       {
         name: "role",
         code: "E2_",
@@ -88,28 +69,12 @@ const localRegister = async (req, res, next) => {
         code: "E4_1",
       });
 
-    // const duplicateByMatricula = await User.count({
-    //   where: {
-    //     matricula,
-    //   },
-    // });
-
-    // if (duplicateByMatricula !== 0)
-    //   throw new ConflictError({
-    //     message: "Matricula already used",
-    //     code: "E4_2",
-    //   });
-
-    // matricula = validateMatricula(matricula);
     role = validateRole(role);
 
     firstname = validateFirstname(firstname);
     lastname = validateLastname(lastname);
-    // gender = validateGender(gender);
 
     validatePassword(password);
-
-    // validatePasswordValidation(passwordValidation, password);
 
     const hashedPassword = hashPassword(password);
 
@@ -121,7 +86,6 @@ const localRegister = async (req, res, next) => {
       email,
       gender,
       role,
-      // matricula,
       provider: defaultLocalProviderName,
       password: hashedPassword,
       channelId: createRandomString(),

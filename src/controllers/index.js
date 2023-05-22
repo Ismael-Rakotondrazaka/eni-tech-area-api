@@ -16,3 +16,4 @@ export * from "./challengeAnswers/index.js";
 export * from "./events/index.js";
 export * from "./userChallenges/index.js";
 export * from "./challengeTags/index.js";
+export * from "./tags/index.js";
