@@ -35,7 +35,7 @@ export default (sequelize, DataTypes) => {
 
       models.User.hasMany(models.Challenge, {
         foreignKey: "userId",
-      })
+      });
     }
   }
   User.init(
