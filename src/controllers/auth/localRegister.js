@@ -1,5 +1,5 @@
 import { User } from "../../models/index.js";
-import { userResource } from "../../resources/index.js";
+import { userResource, userTagCollection } from "../../resources/index.js";
 import {
   BadRequestError,
   ConflictError,
@@ -127,6 +127,9 @@ const localRegister = async (req, res, next) => {
       channelId: createRandomString(),
     });
 
+    //  Get the user tags
+    const userTags = await targetUser.getTags();
+
     await targetUser.reload();
 
     const targetUserResource = userResource(targetUser);
@@ -142,7 +145,10 @@ const localRegister = async (req, res, next) => {
     const accessToken = createAccessToken(accessTokenData);
 
     const data = {
-      user: targetUserResource,
+      user: {
+        ...targetUserResource,
+        tags: userTagCollection(userTags),
+      },
       tokens: {
         accessToken,
       },
