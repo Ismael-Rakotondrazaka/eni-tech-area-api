@@ -13,6 +13,7 @@ import { notificationRoutes } from "./routes/api/v1/notifications/index.js";
 import { challengeRoutes } from "./routes/api/v1/challenges/index.js";
 import { eventRoutes } from "./routes/api/v1/events/index.js";
 import { seeds } from "./seeders/seeds.js";
+import { tagRoutes } from "./routes/api/v1/tags/index.js";
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/challenges", challengeRoutes);
 app.use("/api/v1/events", eventRoutes);
+app.use("/api/v1/tags", tagRoutes);
 
 // ! DEV only
 if (process.env.APP_ENV === "development") {
