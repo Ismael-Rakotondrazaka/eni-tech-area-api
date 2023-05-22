@@ -11,6 +11,9 @@ export default (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
+      models.Vote.belongsTo(models.Answer, {
+        foreignKey: "answerId",
+      });
     }
   }
 
@@ -28,6 +31,7 @@ export default (sequelize, DataTypes) => {
           model: "answers",
           key: "id",
         },
+        allowNull: false,
       },
       userId: {
         type: DataTypes.INTEGER,
@@ -35,6 +39,7 @@ export default (sequelize, DataTypes) => {
           model: "users",
           key: "id",
         },
+        allowNull: false,
       },
       type: {
         type: DataTypes.STRING,

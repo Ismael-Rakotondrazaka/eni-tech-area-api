@@ -21,7 +21,7 @@ const storeAnswer = async (req, res, next) => {
         code: "E5_1",
       });
 
-    if (!/\d+$/.test(questionId)) throw new NotFoundError();
+    if (!/^\d+$/.test(questionId)) throw new NotFoundError();
 
     const authUser = await User.findByPk(authUserId);
 

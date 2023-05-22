@@ -45,6 +45,7 @@ const indexVote = async (req, res, next) => {
       where: {
         answerId: targetAnswer.id,
       },
+      order: [["createdAt", "ASC"]],
     });
 
     const targetVotesResource = voteCollection(targetVotes);

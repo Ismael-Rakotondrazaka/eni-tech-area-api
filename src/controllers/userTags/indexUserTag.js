@@ -1,7 +1,8 @@
-import { User, UserTag } from "../../models/index.js";
+import { User } from "../../models/index.js";
 import { UnauthorizedError, NotFoundError } from "../../utils/errors/index.js";
 import { createDataResponse } from "../../utils/responses/index.js";
 import { userTagCollection } from "../../resources/index.js";
+import { createBadge } from "../../utils/strings/createBadge.js";
 
 const indexUserTag = async (req, res, next) => {
   try {
@@ -26,16 +27,22 @@ const indexUserTag = async (req, res, next) => {
 
     if (!targetUser) throw new NotFoundError();
 
-    const targetUserTags = await UserTag.findAll({
-      where: {
-        userId: authUser.id,
-      },
+    const targetUserTags = await targetUser.getTags({
+      order: [["name", "ASC"]],
     });
 
-    const targetUserTagsResource = userTagCollection(targetUserTags);
+    const targetUserTagsCollection = userTagCollection(targetUserTags);
 
     const data = {
-      tags: targetUserTagsResource,
+      tags: targetUserTagsCollection.map((userTag) => {
+        const questionBadge = createBadge(userTag.questionScore);
+        const challengeBadge = createBadge(userTag.challengeScore);
+        return {
+          ...userTag,
+          questionBadge,
+          challengeBadge,
+        };
+      }),
     };
 
     const dataResponse = createDataResponse({

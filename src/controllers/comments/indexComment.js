@@ -45,6 +45,7 @@ const indexComment = async (req, res, next) => {
       where: {
         answerId,
       },
+      order: [["createdAt", "ASC"]],
     });
 
     const targetCommentsResource = commentCollection(targetComments);

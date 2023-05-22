@@ -1,4 +1,4 @@
-import { Answer, User, Vote, Question } from "../../models/index.js";
+import { Answer, User, Question } from "../../models/index.js";
 import {
   UnauthorizedError,
   createDataResponse,
@@ -40,22 +40,15 @@ const indexVoteCount = async (req, res, next) => {
 
     if (!targetAnswer) throw new NotFoundError();
 
-    const upCount = await Vote.count({
+    const upCount = await targetAnswer.countVotes({
       where: {
         type: "up",
-      },
-    });
-
-    const downCount = await Vote.count({
-      where: {
-        type: "down",
       },
     });
 
     const data = {
       counts: {
         up: upCount,
-        down: downCount,
       },
     };
 

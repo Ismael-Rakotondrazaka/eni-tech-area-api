@@ -30,11 +30,15 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      images: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
       startAt: {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      entAt: {
+      endAt: {
         type: DataTypes.DATE,
         allowNull: true,
       },

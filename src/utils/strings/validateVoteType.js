@@ -1,7 +1,7 @@
 import { BadRequestError } from "../errors/index.js";
 
 const validateVoteType = (type) => {
-  const validVotes = ["up", "down"];
+  const validVotes = ["up"];
 
   if (!validVotes.includes(type))
     throw new BadRequestError({

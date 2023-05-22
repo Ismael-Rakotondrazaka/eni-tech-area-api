@@ -1,4 +1,4 @@
-import { User, UserTag } from "../../models/index.js";
+import { User, UserTag, Tag } from "../../models/index.js";
 import {
   UnauthorizedError,
   NotFoundError,
@@ -6,6 +6,7 @@ import {
   ForbiddenError,
   createDataResponse,
   validateTag,
+  createColorsFromTagName,
 } from "../../utils/index.js";
 import { userTagCollection } from "../../resources/index.js";
 import { Op } from "sequelize";
@@ -44,44 +45,73 @@ const storeUserTag = async (req, res, next) => {
 
     tags = tags.map((tag) => validateTag(tag));
 
-    const oldTags = await UserTag.findAll({
+    // check if the tags already exist
+    const existedTags = await Tag.findAll({
       where: {
-        userId: authUser.id,
-        tagName: {
-          [Op.in]: tags,
+        name: {
+          [Op.in]: [tags],
         },
       },
     });
+    const existedTagsName = existedTags.map((existedTag) => existedTag.name);
 
-    const oldTagsNames = oldTags.map((tag) => tag.tagName);
-
-    const newTagsNames = [];
-    tags.forEach((tag) => {
-      if (!oldTagsNames.includes(tag)) {
-        newTagsNames.push(tag);
-      }
+    // if they exist and the user does not have them, we just create the UserTag
+    const ownedTags = await authUser.getTags({
+      attributes: ["name"],
     });
+    const ownedTagsName = ownedTags.map((ownedTag) => ownedTag.name);
 
-    const temp = await UserTag.bulkCreate(
-      newTagsNames.map((tag) => ({
+    const notOwnedTags = existedTags.filter(
+      (tag) => !ownedTagsName.includes(tag.name)
+    );
+
+    await UserTag.bulkCreate(
+      notOwnedTags.map((tag) => ({
         userId: authUser.id,
-        tagName: tag,
+        tagId: tag.id,
+        questionScore: 0,
+        challengeScore: 0,
       }))
     );
 
-    const newTagsIds = temp.map((tag) => tag.id);
+    // then we filter the tag that has not been created and create them
+    const tagsNameToCreate = tags.filter(
+      (tag) => !existedTagsName.includes(tag)
+    );
 
-    const targetUserTags = await UserTag.findAll({
-      where: {
-        id: newTagsIds,
+    const newTags = await Tag.bulkCreate(
+      tagsNameToCreate.map((name) => {
+        const colors = createColorsFromTagName(name);
+
+        return {
+          name,
+          bgColor: colors.bgColor,
+          textColor: colors.textColor,
+        };
+      })
+    );
+
+    await Promise.all(
+      newTags.map(async (tag) => {
+        await tag.reload();
+      })
+    );
+
+    await UserTag.bulkCreate(
+      newTags.map((tag) => ({
         userId: authUser.id,
-      },
-    });
+        tagId: tag.id,
+        questionScore: 0,
+        challengeScore: 0,
+      }))
+    );
 
-    const targetUserTagsResource = userTagCollection(targetUserTags);
+    const targetTags = await authUser.getTags();
+
+    const targetTagsCollection = userTagCollection(targetTags);
 
     const data = {
-      tags: targetUserTagsResource,
+      tags: targetTagsCollection,
     };
 
     const dataResponse = createDataResponse({

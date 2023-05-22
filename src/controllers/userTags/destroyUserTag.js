@@ -1,18 +1,16 @@
 import { User, UserTag } from "../../models/index.js";
 import {
   UnauthorizedError,
-  NotFoundError,
   BadRequestError,
-  ForbiddenError,
   createDataResponse,
   validateTag,
 } from "../../utils/index.js";
 import { Op } from "sequelize";
+import { userTagCollection } from "../../resources/userTagCollection.js";
 
 const destroyUserTag = async (req, res, next) => {
   try {
     const authUserId = req.payload?.user?.id;
-    const { userId: targetUserId } = req.params;
     let { tags } = req.body;
 
     if (!authUserId)
@@ -29,12 +27,6 @@ const destroyUserTag = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const targetUser = await User.findByPk(targetUserId);
-
-    if (!targetUser) throw new NotFoundError();
-
-    if (targetUser.id !== authUser.id) throw new ForbiddenError();
-
     if (!Array.isArray(tags))
       throw new BadRequestError({
         message: "tags in not an array",
@@ -43,18 +35,28 @@ const destroyUserTag = async (req, res, next) => {
 
     tags = tags.map((tag) => validateTag(tag));
 
-    const deletedCount = await UserTag.destroy({
+    const tagsToDelete = await authUser.getTags({
       where: {
-        tagName: {
+        name: {
           [Op.in]: tags,
         },
       },
+      attributes: ["id"],
     });
 
-    const data = {
-      deleted: {
-        count: deletedCount,
+    await UserTag.destroy({
+      where: {
+        userId: authUser.id,
+        tagId: tagsToDelete.map((tag) => tag.id),
       },
+    });
+
+    const targetUserTags = await authUser.getTags();
+
+    const targetUserTagsCollection = userTagCollection(targetUserTags);
+
+    const data = {
+      tags: targetUserTagsCollection,
     };
 
     const dataResponse = createDataResponse({

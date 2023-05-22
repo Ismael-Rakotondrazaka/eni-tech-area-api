@@ -25,7 +25,7 @@ const showAnswer = async (req, res, next) => {
         code: "E5_1",
       });
 
-    if (!/\d+/.test(questionId) || !/\d+/.test(answerId))
+    if (!/^\d+$/.test(questionId) || !/^\d+$/.test(answerId))
       throw new NotFoundError();
 
     const targetQuestion = await Question.findByPk(+questionId);

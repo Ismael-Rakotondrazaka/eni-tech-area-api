@@ -48,8 +48,7 @@ const showVote = async (req, res, next) => {
     const targetVote = await Vote.findOne({
       where: {
         id: +voteId,
-        answerId: targetAnswer.id,
-        userId: authUser.id,
+        answerId: +targetAnswer.id,
       },
     });
 

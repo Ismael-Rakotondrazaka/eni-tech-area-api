@@ -35,7 +35,21 @@ export default (sequelize, DataTypes) => {
 
       models.User.hasMany(models.Challenge, {
         foreignKey: "userId",
-      })
+      });
+
+      models.User.belongsToMany(models.Tag, {
+        through: models.UserTag,
+        // as: "UserQuestionTag",
+        foreignKey: "userId",
+        otherKey: "tagId",
+      });
+
+      models.User.belongsToMany(models.Tag, {
+        through: models.UserTag,
+        // as: "UserQuestionTag",
+        foreignKey: "userId",
+        otherKey: "tagId",
+      });
     }
   }
   User.init(

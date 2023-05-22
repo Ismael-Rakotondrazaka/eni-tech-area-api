@@ -9,14 +9,14 @@ const httpServer = http.createServer(app);
 
 socketIO.attach(httpServer, {
   cors: {
-    origin: ["*"],
+    origin: "*",
     credentials: true,
   },
 });
 
 sequelize
   .sync({
-    //force: true
+    // force: true
     // alter: true,
   })
   .then(() => {

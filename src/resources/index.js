@@ -18,3 +18,7 @@ export * from "./challengeCollection.js";
 export * from "./challengeResource.js";
 export * from "./challengeAnswerCollection.js";
 export * from "./challengeAnswerResource.js";
+export * from "./eventCollection.js";
+export * from "./eventResource.js";
+export * from "./challengeTagResource.js";
+export * from "./challengeTagCollection.js";
