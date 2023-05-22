@@ -1,4 +1,3 @@
-export * from "./qrCodes/index.js";
 export * from "./emails/index.js";
 export * from "./routes/index.js";
 export * from "./auth/index.js";
@@ -12,5 +11,8 @@ export * from "./userTags/index.js";
 export * from "./questionTags/index.js";
 export * from "./userQuestions/index.js";
 export * from "./notifications/index.js";
-export * from "./challenge/index.js";
-export * from "./challengeAnswer/index.js";
+export * from "./challenges/index.js";
+export * from "./challengeAnswers/index.js";
+export * from "./events/index.js";
+export * from "./userChallenges/index.js";
+export * from "./challengeTags/index.js";

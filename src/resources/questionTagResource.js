@@ -1,10 +1,11 @@
 const questionTagResource = (resource) => {
   return {
-    id: resource.id,
-    questionId: resource.questionId,
-    tagName: resource.tagName,
-    createdAt: resource.createdAt,
-    updatedAt: resource.updatedAt,
+    userId: resource.userId,
+    name: resource.name,
+    bgColor: resource.bgColor,
+    textColor: resource.textColor,
+    createdAt: resource.QuestionTag.createdAt,
+    updatedAt: resource.QuestionTag.updatedAt,
   };
 };
 

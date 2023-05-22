@@ -62,7 +62,6 @@ const localLogin = async (req, res, next) => {
     const accessTokenData = {
       user: {
         id: targetUserResource.id,
-        name: targetUserResource.name,
         email: targetUserResource.email,
         role: targetUserResource.role,
       },

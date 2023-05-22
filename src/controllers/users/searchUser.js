@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 
-import { User, UserTag } from "../../models/index.js";
+import { User, Tag } from "../../models/index.js";
 import {
   UnauthorizedError,
   BadRequestError,
@@ -68,12 +68,13 @@ const searchUser = async (req, res, next) => {
       });
     } else {
       targetUsers = await User.findAll({
-        includes: [
+        include: [
           {
-            model: UserTag,
+            model: Tag,
             where: {
-              tagName: tagName.toUpperCase(),
+              name: tagName.toUpperCase(),
             },
+            require: true,
           },
         ],
         order: [

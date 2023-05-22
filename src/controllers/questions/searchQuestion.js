@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Question, QuestionTag, User } from "../../models/index.js";
+import { Question, Tag, User } from "../../models/index.js";
 import { questionCollection } from "../../resources/index.js";
 import {
   UnauthorizedError,
@@ -41,6 +41,7 @@ const searchQuestion = async (req, res, next) => {
             [Op.substring]: title,
           },
         },
+        order: [["createdAt", "DESC"]],
       });
     } else if (content) {
       targetQuestions = await Question.findAll({
@@ -49,6 +50,7 @@ const searchQuestion = async (req, res, next) => {
             [Op.substring]: content,
           },
         },
+        order: [["createdAt", "DESC"]],
       });
     } else if (both) {
       targetQuestions = await Question.findAll({
@@ -56,27 +58,29 @@ const searchQuestion = async (req, res, next) => {
           [Op.or]: [
             {
               title: {
-                [Op.substring]: content,
+                [Op.substring]: both,
               },
             },
             {
               content: {
-                [Op.substring]: content,
+                [Op.substring]: both,
               },
             },
           ],
         },
+        order: [["createdAt", "DESC"]],
       });
     } else {
       targetQuestions = await Question.findAll({
         include: [
           {
-            model: QuestionTag,
+            model: Tag,
             where: {
-              tagName: tagName.toUpperCase(),
+              name: tagName.toUpperCase(),
             },
           },
         ],
+        order: [["createdAt", "DESC"]],
       });
     }
 

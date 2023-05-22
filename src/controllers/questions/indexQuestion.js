@@ -20,7 +20,9 @@ const indexQuestion = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const targetQuestions = await Question.findAll();
+    const targetQuestions = await Question.findAll({
+      order: [["createdAt", "DESC"]],
+    });
 
     const targetQuestionsCollection = questionCollection(targetQuestions);
 

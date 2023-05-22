@@ -35,6 +35,7 @@ const indexAnswer = async (req, res, next) => {
       where: {
         questionId: targetQuestion.id,
       },
+      order: [["createdAt", "ASC"]],
     });
 
     const targetAnswersResource = answerCollection(targetAnswers);

@@ -15,8 +15,19 @@ export default (sequelize, DataTypes) => {
         foreignKey: "challengeId",
       });
 
+      models.Question.hasMany(models.ChallengeTag, {
+        foreignKey: "challengeId",
+      });
+
       models.Challenge.belongsTo(models.User, {
         foreignKey: "userId",
+      });
+
+      models.Challenge.belongsToMany(models.Tag, {
+        through: models.ChallengeTag,
+        // as: "UserQuestionTag",
+        foreignKey: "challengeId",
+        otherKey: "tagId",
       });
     }
   }
@@ -40,14 +51,22 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         required: true,
       },
-      content: {
+      question: {
         type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      answer: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      difficulty: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
       endAt: {
         type: DataTypes.DATE,
         allowNull: true,
-      }
+      },
     },
     {
       sequelize,

@@ -28,11 +28,20 @@ export default (sequelize, DataTypes) => {
           key: "id",
         },
       },
-      tagName: {
-        type: DataTypes.STRING,
+      tagId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "tags",
+          key: "id",
+        },
         allowNull: false,
       },
-      score: {
+      questionScore: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      challengeScore: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,

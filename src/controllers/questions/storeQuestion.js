@@ -1,4 +1,4 @@
-import { Question, QuestionTag, User } from "../../models/index.js";
+import { Question, QuestionTag, User, Tag } from "../../models/index.js";
 import { questionResource } from "../../resources/questionResource.js";
 import {
   validateTitle,
@@ -7,7 +7,10 @@ import {
   BadRequestError,
   createDataResponse,
   validateTag,
+  createColorsFromTagName,
 } from "../../utils/index.js";
+
+import { Op } from "sequelize";
 
 const storeQuestion = async (req, res, next) => {
   try {
@@ -35,7 +38,7 @@ const storeQuestion = async (req, res, next) => {
     if (!Array.isArray(tags))
       throw new BadRequestError({
         message: "tags is not an array",
-        code: "E5_",
+        code: "E2_",
       });
 
     tags = tags.map((tag) => validateTag(tag));
@@ -48,10 +51,41 @@ const storeQuestion = async (req, res, next) => {
 
     await targetQuestion.reload();
 
+    const existedTags = await Tag.findAll({
+      where: {
+        name: {
+          [Op.in]: [tags],
+        },
+      },
+    });
+    const existedTagsName = existedTags.map((existedTag) => existedTag.name);
+
+    const tagsNameToCreate = tags.filter(
+      (tag) => !existedTagsName.includes(tag)
+    );
+
+    const newTags = await Tag.bulkCreate(
+      tagsNameToCreate.map((name) => {
+        const colors = createColorsFromTagName(name);
+
+        return {
+          name,
+          bgColor: colors.bgColor,
+          textColor: colors.textColor,
+        };
+      })
+    );
+
+    await Promise.all(
+      newTags.map(async (tag) => {
+        await tag.reload();
+      })
+    );
+
     await QuestionTag.bulkCreate(
-      tags.map((tag) => ({
-        tagName: tag,
-        userId: authUser.id,
+      existedTags.concat(newTags).map((tag) => ({
+        questionId: targetQuestion.id,
+        tagId: tag.id,
       }))
     );
 

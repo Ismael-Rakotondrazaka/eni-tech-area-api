@@ -26,7 +26,7 @@ const showQuestion = async (req, res, next) => {
 
     const { questionId } = req.params;
 
-    if (!/\d+/.test(questionId)) throw new NotFoundError();
+    if (!/^\d+$/.test(questionId)) throw new NotFoundError();
 
     const targetQuestion = await Question.findByPk(+questionId);
 
