@@ -16,11 +16,11 @@ const questionRoutes = Router();
  * This is a public route, anyone can view all questions
  */
 questionRoutes.get("/", indexQuestion);
+questionRoutes.get("/:questionId", showQuestion);
 
 questionRoutes.post("/", authMiddleware, storeQuestion);
 questionRoutes.get("/suggestions", authMiddleware, indexQuestionSuggestion);
 questionRoutes.get("/search", authMiddleware, searchQuestion);
-questionRoutes.get("/:questionId", authMiddleware, showQuestion);
 
 questionRoutes.use("/:questionId/answers", answerRoutes);
 

@@ -3,6 +3,7 @@ import { questionCollection } from "../../resources/index.js";
 import { getPagination } from "../../utils/getPagination.js";
 import { NotFoundError, createDataResponse } from "../../utils/index.js";
 
+// TODO: add filters in questions api
 const indexQuestion = async (req, res, next) => {
   const page = parseInt(req.query.page || 1);
   const size = 8;
