@@ -12,7 +12,11 @@ import { questionTagRoutes } from "./questionTags/index.js";
 
 const questionRoutes = Router();
 
-questionRoutes.get("/", authMiddleware, indexQuestion);
+/**
+ * This is a public route, anyone can view all questions
+ */
+questionRoutes.get("/", indexQuestion);
+
 questionRoutes.post("/", authMiddleware, storeQuestion);
 questionRoutes.get("/suggestions", authMiddleware, indexQuestionSuggestion);
 questionRoutes.get("/search", authMiddleware, searchQuestion);
