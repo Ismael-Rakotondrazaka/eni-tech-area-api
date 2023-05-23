@@ -13,6 +13,8 @@ import { notificationRoutes } from "./routes/api/v1/notifications/index.js";
 import { challengeRoutes } from "./routes/api/v1/challenges/index.js";
 import { eventRoutes } from "./routes/api/v1/events/index.js";
 import { tagRoutes } from "./routes/api/v1/tags/index.js";
+import { commentRoutes } from "./routes/api/v1/comments/index.js";
+import { voteRoutes } from "./routes/api/v1/votes/index.js";
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use("/api/v1/emails", emailRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/userlists", userListFileRoutes);
 app.use("/api/v1/questions", questionRoutes);
+app.use("/api/v1/comments", commentRoutes);
+app.use("/api/v1/votes", voteRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/challenges", challengeRoutes);

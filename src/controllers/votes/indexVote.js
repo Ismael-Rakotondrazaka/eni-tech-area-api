@@ -1,57 +1,37 @@
-import { Answer, User, Vote, Question } from "../../models/index.js";
-import { voteCollection } from "../../resources/index.js";
-import {
-  UnauthorizedError,
-  createDataResponse,
-  NotFoundError,
-} from "../../utils/index.js";
+import { Answer } from "../../models/index.js";
+import { createDataResponse, NotFoundError } from "../../utils/index.js";
 
 const indexVote = async (req, res, next) => {
   try {
-    const authUserId = req.payload?.user?.id;
-    const { questionId, answerId } = req.params;
+    const { answerId } = req.query;
 
-    if (!authUserId)
-      throw new UnauthorizedError({
-        message: "Credential doesn't match to our records.",
-        code: "E5_1",
-      });
-
-    if (!/^\d+$/.test(questionId) || !/^\d+$/.test(answerId))
-      throw new NotFoundError();
-
-    const authUser = await User.findByPk(+authUserId);
-
-    if (!authUser)
-      throw new UnauthorizedError({
-        message: "Credential doesn't match to our records.",
-        code: "E5_1",
-      });
-
-    const targetQuestion = await Question.findByPk(+questionId);
-
-    if (!targetQuestion) throw new NotFoundError();
+    if (!/^\d+$/.test(answerId)) throw new NotFoundError();
 
     const targetAnswer = await Answer.findOne({
       where: {
         id: +answerId,
-        questionId: targetQuestion.id,
       },
     });
 
     if (!targetAnswer) throw new NotFoundError();
 
-    const targetVotes = await Vote.findAll({
+    const upCount = await targetAnswer.countVotes({
       where: {
-        answerId: targetAnswer.id,
+        type: "up",
       },
-      order: [["createdAt", "ASC"]],
     });
 
-    const targetVotesResource = voteCollection(targetVotes);
+    const downCount = await targetAnswer.countVotes({
+      where: {
+        type: "down",
+      },
+    });
 
     const data = {
-      votes: targetVotesResource,
+      votes: {
+        up: upCount,
+        down: downCount,
+      },
     };
 
     const dataResponse = createDataResponse({
@@ -59,7 +39,7 @@ const indexVote = async (req, res, next) => {
       request: req,
     });
 
-    res.status(201);
+    res.status(200);
 
     return res.json(dataResponse);
   } catch (error) {
