@@ -1,5 +1,5 @@
 import { User } from "../../models/index.js";
-import { userResource } from "../../resources/index.js";
+import { userResource, userTagCollection } from "../../resources/index.js";
 import {
   BadRequestError,
   ConflictError,
@@ -8,35 +8,28 @@ import {
   createAccessToken,
   hashPassword,
   validateEmail,
-  validateFirstName,
-  validateLastName,
+  validateFirstname,
+  validateLastname,
   validatePassword,
-  validatePasswordValidation,
-  validateGender,
   validateRole,
-  validateMatricula,
 } from "../../utils/index.js";
 
 const localRegister = async (req, res, next) => {
+  /**
+   * We are gonna add the user information later.
+   * But in the first registration, we only need
+   * the user to provide his firstname, lastname, email, password and gender
+   */
   try {
-    let {
-      firstName,
-      lastName,
-      email,
-      password,
-      passwordValidation,
-      gender,
-      role,
-      matricula,
-    } = req.body;
+    let { firstname, lastname, email, password, gender, role } = req.body;
 
     const fieldsRequired = [
       {
-        name: "firstName",
+        name: "firstname",
         code: "E2_1",
       },
       {
-        name: "lastName",
+        name: "lastname",
         code: "E2_2",
       },
       {
@@ -46,18 +39,6 @@ const localRegister = async (req, res, next) => {
       {
         name: "password",
         code: "E2_4",
-      },
-      {
-        name: "passwordValidation",
-        code: "E2_5",
-      },
-      {
-        name: "gender",
-        code: "E2_11",
-      },
-      {
-        name: "matricula",
-        code: "E2_",
       },
       {
         name: "role",
@@ -88,44 +69,30 @@ const localRegister = async (req, res, next) => {
         code: "E4_1",
       });
 
-    const duplicateByMatricula = await User.count({
-      where: {
-        matricula,
-      },
-    });
-
-    if (duplicateByMatricula !== 0)
-      throw new ConflictError({
-        message: "Matricula already used",
-        code: "E4_2",
-      });
-
-    matricula = validateMatricula(matricula);
     role = validateRole(role);
 
-    firstName = validateFirstName(firstName);
-    lastName = validateLastName(lastName);
-    gender = validateGender(gender);
+    firstname = validateFirstname(firstname);
+    lastname = validateLastname(lastname);
 
     validatePassword(password);
-
-    validatePasswordValidation(passwordValidation, password);
 
     const hashedPassword = hashPassword(password);
 
     const defaultLocalProviderName = "local";
 
     const targetUser = await User.create({
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       email,
       gender,
       role,
-      matricula,
       provider: defaultLocalProviderName,
       password: hashedPassword,
       channelId: createRandomString(),
     });
+
+    //  Get the user tags
+    const userTags = await targetUser.getTags();
 
     await targetUser.reload();
 
@@ -142,7 +109,10 @@ const localRegister = async (req, res, next) => {
     const accessToken = createAccessToken(accessTokenData);
 
     const data = {
-      user: targetUserResource,
+      user: {
+        ...targetUserResource,
+        tags: userTagCollection(userTags),
+      },
       tokens: {
         accessToken,
       },

@@ -16,11 +16,11 @@ export const up = async (queryInterface, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    firstName: {
+    firstname: {
       allowNull: false,
       type: Sequelize.STRING,
     },
-    lastName: {
+    lastname: {
       allowNull: false,
       type: Sequelize.STRING,
     },
