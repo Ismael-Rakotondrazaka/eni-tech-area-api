@@ -60,11 +60,6 @@ export default (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER,
       },
-      matricula: {
-        type: DataTypes.INTEGER,
-        allowNull: true, // We may not need it anymore because the app is used by anyone
-        // unique: true,
-      },
       firstname: {
         type: DataTypes.STRING,
         allowNull: false,

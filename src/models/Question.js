@@ -10,20 +10,26 @@ export default (sequelize, DataTypes) => {
      */
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
-      // define association here
-      models.Question.hasMany(models.QuestionTag, {
+      this.belongsTo(models.User, {
+        foreignKey: "userId",
+        as: "user",
+      });
+
+      this.hasMany(models.QuestionTag, {
         foreignKey: "questionId",
       });
 
-      models.Question.hasMany(models.Answer, {
+      this.hasMany(models.Answer, {
         foreignKey: "questionId",
+        as: "answers",
       });
 
-      models.Question.belongsToMany(models.Tag, {
+      this.belongsToMany(models.Tag, {
         through: models.QuestionTag,
         // as: "UserQuestionTag",
         foreignKey: "questionId",
         otherKey: "tagId",
+        as: "tags",
       });
     }
   }

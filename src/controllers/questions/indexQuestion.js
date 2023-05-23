@@ -6,6 +6,7 @@ const indexQuestion = async (req, res, next) => {
   try {
     const targetQuestions = await Question.findAll({
       order: [["createdAt", "DESC"]],
+      include: ["user", "tags", "answers"],
     });
 
     const targetQuestionsCollection = questionCollection(targetQuestions);

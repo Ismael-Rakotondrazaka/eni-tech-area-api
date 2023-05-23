@@ -29,6 +29,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      level: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       description: {
         allowNull: true,
         type: Sequelize.STRING,
