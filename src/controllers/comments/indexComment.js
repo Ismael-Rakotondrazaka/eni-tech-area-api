@@ -1,51 +1,21 @@
-import { Answer, Comment, Question, User } from "../../models/index.js";
+import { Answer, Comment } from "../../models/index.js";
 import { commentCollection } from "../../resources/index.js";
-import {
-  UnauthorizedError,
-  createDataResponse,
-  NotFoundError,
-} from "../../utils/index.js";
+import { NotFoundError, createDataResponse } from "../../utils/index.js";
 
 const indexComment = async (req, res, next) => {
   try {
-    const authUserId = req.payload?.user?.id;
-    const { questionId, answerId } = req.params;
+    const answerId = req.query.answerId;
 
-    if (!authUserId)
-      throw new UnauthorizedError({
-        message: "Credential doesn't match to our records.",
-        code: "E5_1",
-      });
+    const targetAnswer = await Answer.findByPk(+answerId);
 
-    if (!/^\d+$/.test(questionId) || !/^\d+$/.test(answerId))
-      throw new NotFoundError();
-
-    const authUser = await User.findByPk(authUserId);
-
-    if (!authUser)
-      throw new UnauthorizedError({
-        message: "Credential doesn't match to our records.",
-        code: "E5_1",
-      });
-
-    const targetQuestion = await Question.findByPk(questionId);
-
-    if (!targetQuestion) throw new NotFoundError();
-
-    const targetAnswer = await Answer.findOne({
-      where: {
-        id: answerId,
-        questionId,
-      },
-    });
-
-    if (!targetAnswer) throw new NotFoundError();
+    if (!targetAnswer) throw new NotFoundError({ message: "Answer not found" });
 
     const targetComments = await Comment.findAll({
       where: {
         answerId,
       },
       order: [["createdAt", "ASC"]],
+      include: "user",
     });
 
     const targetCommentsResource = commentCollection(targetComments);
@@ -59,7 +29,7 @@ const indexComment = async (req, res, next) => {
       request: req,
     });
 
-    res.status(201);
+    res.status(200);
 
     return res.json(dataResponse);
   } catch (error) {

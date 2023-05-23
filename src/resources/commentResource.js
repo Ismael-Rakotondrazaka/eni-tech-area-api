@@ -1,11 +1,12 @@
+import { userResource } from "./userResource.js";
+
 const commentResource = (resource) => {
   return {
     id: resource.id,
-    userId: resource.userId,
-    answerId: resource.answerId,
     content: resource.content,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt,
+    user: userResource(resource.user),
   };
 };
 

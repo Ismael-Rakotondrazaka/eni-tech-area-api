@@ -11,12 +11,13 @@ export default (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
-      models.Comment.belongsTo(models.Answer, {
+      this.belongsTo(models.Answer, {
         foreignKey: "answerId",
       });
 
-      models.Comment.belongsTo(models.User, {
+      this.belongsTo(models.User, {
         foreignKey: "userId",
+        as: "user",
       });
     }
   }
