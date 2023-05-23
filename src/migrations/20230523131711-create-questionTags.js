@@ -1,0 +1,35 @@
+"use strict";
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("questionTags", {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+        type: Sequelize.INTEGER,
+      },
+      questionId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "questions",
+          key: "id",
+        },
+        allowNull: false,
+      },
+      tagId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "tags",
+          key: "id",
+        },
+        allowNull: false,
+      },
+    });
+  },
+
+  async down(queryInterface) {
+    await queryInterface.dropTable("questionTags");
+  },
+};

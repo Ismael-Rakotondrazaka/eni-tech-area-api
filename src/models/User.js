@@ -108,11 +108,11 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      channelId: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-      },
+      // channelId: {
+      //   type: DataTypes.STRING,
+      //   unique: true,
+      //   allowNull: true,
+      // },
       imageUrl: {
         type: DataTypes.STRING,
         allowNull: true,
