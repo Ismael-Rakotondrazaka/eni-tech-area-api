@@ -1,105 +1,42 @@
 "use strict";
+const { faker } = require("@faker-js/faker");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkInsert(
-      "users",
-      [
-        {
-          id: 1,
-          firstname: "John",
-          lastname: "Doe",
-          email: "johndoe@example.com",
-          password: "password123",
-          role: "user",
-          imageUrl: "https://example.com/avatar1.jpg",
-        },
-        {
-          id: 2,
-          firstname: "Alice",
-          lastname: "Smith",
-          email: "alicesmith@example.com",
-          password: "password456",
-          role: "user",
-          imageUrl: "https://example.com/avatar2.jpg",
-        },
-        {
-          id: 3,
-          firstname: "Michael",
-          lastname: "Johnson",
-          email: "michaeljohnson@example.com",
-          password: "password789",
-          role: "admin",
-          imageUrl: "https://example.com/avatar3.jpg",
-        },
-        {
-          id: 4,
-          firstname: "Emily",
-          lastname: "Brown",
-          email: "emilybrown@example.com",
-          password: "password987",
-          role: "user",
-          imageUrl: "https://example.com/avatar4.jpg",
-        },
-        {
-          id: 5,
-          firstname: "David",
-          lastname: "Miller",
-          email: "davidmiller@example.com",
-          password: "password321",
-          role: "user",
-          imageUrl: "https://example.com/avatar5.jpg",
-        },
-        {
-          id: 6,
-          firstname: "Olivia",
-          lastname: "Wilson",
-          email: "oliviawilson@example.com",
-          password: "password654",
-          role: "user",
-          imageUrl: "https://example.com/avatar6.jpg",
-        },
-        {
-          id: 7,
-          firstname: "James",
-          lastname: "Taylor",
-          email: "jamestaylor@example.com",
-          password: "password123",
-          role: "user",
-          imageUrl: "https://example.com/avatar7.jpg",
-        },
-        {
-          id: 8,
-          firstname: "Sophia",
-          lastname: "Anderson",
-          email: "sophiaanderson@example.com",
-          password: "password456",
-          role: "user",
-          imageUrl: "https://example.com/avatar8.jpg",
-        },
-        {
-          id: 9,
-          firstname: "Daniel",
-          lastname: "Thomas",
-          email: "danielthomas@example.com",
-          password: "password789",
-          role: "user",
-          imageUrl: "https://example.com/avatar9.jpg",
-        },
-        {
-          id: 10,
-          firstname: "Mia",
-          lastname: "Robinson",
-          email: "miarobinson@example.com",
-          password: "password987",
-          role: "admin",
-          imageUrl: "https://example.com/avatar10.jpg",
-        },
-      ],
+    const users = [
+      {
+        id: 1,
+        firstname: "John",
+        lastname: "Doe",
+        email: "john@doe.com",
+        password: "00000000",
+        role: "user",
+        imageUrl: "https://i.pravatar.cc/300?u=1",
+      },
+      {
+        id: 2,
+        firstname: "Jane",
+        lastname: "Smith",
+        email: "jane@smith.com",
+        password: "00000000",
+        role: "admin",
+        imageUrl: "https://i.pravatar.cc/300?u=2",
+      },
+    ];
 
-      {}
-    );
+    for (let i = 3; i <= 10; i++) {
+      users.push({
+        id: i,
+        firstname: faker.name.firstName(),
+        lastname: faker.name.lastName(),
+        email: faker.internet.email(),
+        password: "00000000",
+        role: faker.helpers.arrayElement(["user", "admin"]),
+        imageUrl: "https://i.pravatar.cc/300?u=" + i,
+      });
+    }
+    await queryInterface.bulkInsert("users", users, {});
   },
 
   async down(queryInterface) {
