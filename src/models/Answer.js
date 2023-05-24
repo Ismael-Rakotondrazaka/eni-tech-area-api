@@ -13,6 +13,7 @@ export default (sequelize, DataTypes) => {
       // define association here
       models.Answer.hasMany(models.Comment, {
         foreignKey: "answerId",
+        as: "comments",
       });
 
       models.Answer.belongsTo(models.Question, {
@@ -21,6 +22,7 @@ export default (sequelize, DataTypes) => {
 
       models.Answer.hasMany(models.Vote, {
         foreignKey: "answerId",
+        as: "votes",
       });
     }
   }

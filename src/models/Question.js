@@ -15,14 +15,10 @@ export default (sequelize, DataTypes) => {
         as: "user",
       });
 
-      // this.hasMany(models.QuestionTag, {
-      //   foreignKey: "questionId",
-      // });
-
       this.belongsToMany(models.Tag, {
         through: models.QuestionTag,
-        // foreignKey: "questionId",
-        // otherKey: "tagId",
+        foreignKey: "questionId",
+        otherKey: "tagId",
         as: "tags",
       });
 
@@ -30,14 +26,6 @@ export default (sequelize, DataTypes) => {
         foreignKey: "questionId",
         as: "answers",
       });
-
-      // this.belongsToMany(models.Tag, {
-      //   through: models.QuestionTag,
-      //   // as: "UserQuestionTag",
-      //   foreignKey: "questionId",
-      //   otherKey: "tagId",
-      //   as: "tags",
-      // });
     }
   }
 

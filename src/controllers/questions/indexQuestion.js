@@ -6,6 +6,7 @@ import questionFilter from "../../utils/filters/questionFilter.js";
 
 const indexQuestion = async (req, res, next) => {
   const page = parseInt(req.query.page || 1);
+  const orderDirection = req.query.orderDirection || "ASC";
   const size = 8;
   try {
     if (page <= 0) {
@@ -15,6 +16,7 @@ const indexQuestion = async (req, res, next) => {
     const whereTagQuery = questionFilter.getQuestionTagFilters(req);
 
     const { count, rows } = await Question.findAndCountAll({
+      order: [["createdAt", orderDirection]],
       where: {
         ...whereQuery,
       },

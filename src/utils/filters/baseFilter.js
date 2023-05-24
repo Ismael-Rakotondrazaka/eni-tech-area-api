@@ -21,11 +21,15 @@ export class BaseFilter {
       if (!query) continue;
 
       for (const operator of this.safeParams[param]) {
-        const q = query[operator];
+        let q = query[operator];
 
         if (!q) continue;
 
         const mappedOperator = this.operatorMap[operator];
+
+        if (param === "tags") {
+          q = q.split(",");
+        }
 
         sequelizeQueries = {
           ...sequelizeQueries,

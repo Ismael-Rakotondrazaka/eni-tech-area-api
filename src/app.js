@@ -15,6 +15,7 @@ import { eventRoutes } from "./routes/api/v1/events/index.js";
 import { tagRoutes } from "./routes/api/v1/tags/index.js";
 import { commentRoutes } from "./routes/api/v1/comments/index.js";
 import { voteRoutes } from "./routes/api/v1/votes/index.js";
+import { answerRoutes } from "./routes/api/v1/answers/index.js";
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use("/api/v1/emails", emailRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/userlists", userListFileRoutes);
 app.use("/api/v1/questions", questionRoutes);
+app.use("/api/v1/answers", answerRoutes);
 app.use("/api/v1/comments", commentRoutes);
 app.use("/api/v1/votes", voteRoutes);
 app.use("/api/v1/users", userRoutes);

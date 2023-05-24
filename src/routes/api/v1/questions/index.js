@@ -5,10 +5,9 @@ import {
   indexQuestion,
   searchQuestion,
   indexQuestionSuggestion,
+  indexQuestionTag,
 } from "../../../../controllers/index.js";
 import { authMiddleware } from "../../../../middlewares/index.js";
-import { answerRoutes } from "./answers/index.js";
-import { questionTagRoutes } from "./questionTags/index.js";
 
 const questionRoutes = Router();
 
@@ -17,13 +16,10 @@ const questionRoutes = Router();
  */
 questionRoutes.get("/", indexQuestion);
 questionRoutes.get("/:questionId", showQuestion);
+questionRoutes.use("/:questionId/tags", indexQuestionTag);
 
 questionRoutes.post("/", authMiddleware, storeQuestion);
 questionRoutes.get("/suggestions", authMiddleware, indexQuestionSuggestion);
 questionRoutes.get("/search", authMiddleware, searchQuestion);
-
-questionRoutes.use("/:questionId/answers", answerRoutes);
-
-questionRoutes.use("/:questionId/questiontags", questionTagRoutes);
 
 export { questionRoutes };
