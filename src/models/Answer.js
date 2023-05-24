@@ -24,6 +24,11 @@ export default (sequelize, DataTypes) => {
         foreignKey: "answerId",
         as: "votes",
       });
+
+      models.Answer.belongsTo(models.User, {
+        foreignKey: "userId",
+        as: "user",
+      });
     }
   }
 

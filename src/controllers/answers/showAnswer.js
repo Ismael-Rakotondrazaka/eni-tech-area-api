@@ -13,6 +13,7 @@ const showAnswer = async (req, res, next) => {
         id: +answerId,
       },
       include: [
+        "user",
         {
           model: Comment,
           as: "comments",
