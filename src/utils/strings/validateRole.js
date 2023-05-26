@@ -1,7 +1,7 @@
 import { BadRequestError } from "../errors/index.js";
 
 const validateRole = (role) => {
-  const roles = ["student", "teacher"];
+  const roles = ["user", "admin"];
 
   if (!roles.includes(role))
     throw new BadRequestError({
