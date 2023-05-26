@@ -103,6 +103,7 @@ const localRegister = async (req, res, next) => {
         id: targetUserResource.id,
         name: targetUserResource.name,
         email: targetUserResource.email,
+        role: targetUserResource.role,
       },
     };
 
