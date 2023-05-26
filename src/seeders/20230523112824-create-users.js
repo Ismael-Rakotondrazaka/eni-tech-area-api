@@ -1,5 +1,9 @@
 "use strict";
 const { faker } = require("@faker-js/faker");
+const { hashSync } = require("bcrypt");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -10,7 +14,7 @@ module.exports = {
         firstname: "John",
         lastname: "Doe",
         email: "john@doe.com",
-        password: "00000000",
+        password: hashSync("password", +process.env.PASSWORD_SALT_ROUND),
         role: "user",
         imageUrl: "https://i.pravatar.cc/300?u=1",
       },
@@ -19,7 +23,7 @@ module.exports = {
         firstname: "Jane",
         lastname: "Smith",
         email: "jane@smith.com",
-        password: "00000000",
+        password: hashSync("password", +process.env.PASSWORD_SALT_ROUND),
         role: "admin",
         imageUrl: "https://i.pravatar.cc/300?u=2",
       },
@@ -31,7 +35,7 @@ module.exports = {
         firstname: faker.name.firstName(),
         lastname: faker.name.lastName(),
         email: faker.internet.email(),
-        password: "00000000",
+        password: hashSync("password", +process.env.PASSWORD_SALT_ROUND),
         role: faker.helpers.arrayElement(["user", "admin"]),
         imageUrl: "https://i.pravatar.cc/300?u=" + i,
       });
