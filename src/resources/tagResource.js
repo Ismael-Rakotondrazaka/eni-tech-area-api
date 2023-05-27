@@ -4,5 +4,9 @@ export const tagResource = (resource) => {
     name: resource.name,
     bgColor: resource.bgColor,
     textColor: resource.textColor,
+    ...(resource.UserTag && {
+      questionScore: resource.UserTag.questionScore,
+      challengeScore: resource.UserTag.challengeScore,
+    }),
   };
 };

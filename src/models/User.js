@@ -39,7 +39,7 @@ export default (sequelize, DataTypes) => {
 
       models.User.belongsToMany(models.Tag, {
         through: models.UserTag,
-        // as: "UserQuestionTag",
+        as: "tags",
         foreignKey: "userId",
         otherKey: "tagId",
       });

@@ -6,7 +6,7 @@ import {
   ForbiddenError,
   createDataResponse,
   validateTag,
-  createColorsFromTagName,
+  createRadomColor,
 } from "../../utils/index.js";
 import { userTagCollection } from "../../resources/index.js";
 import { Op } from "sequelize";
@@ -15,6 +15,7 @@ const storeUserTag = async (req, res, next) => {
   try {
     const authUserId = req.payload?.user?.id;
     const { userId: targetUserId } = req.params;
+
     let { tags } = req.body;
 
     if (!authUserId)
@@ -76,17 +77,18 @@ const storeUserTag = async (req, res, next) => {
 
     // then we filter the tag that has not been created and create them
     const tagsNameToCreate = tags.filter(
+      /**
+       * Tags that not exist in the database
+       */
       (tag) => !existedTagsName.includes(tag)
     );
 
     const newTags = await Tag.bulkCreate(
       tagsNameToCreate.map((name) => {
-        const colors = createColorsFromTagName(name);
-
         return {
           name,
-          bgColor: colors.bgColor,
-          textColor: colors.textColor,
+          bgColor: createRadomColor(),
+          textColor: "white",
         };
       })
     );

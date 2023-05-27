@@ -13,7 +13,7 @@ const whoami = async (req, res, next) => {
         code: "E5_1",
       });
 
-    const authUser = await User.findByPk(authUserId);
+    const authUser = await User.findByPk(authUserId, { include: "tags" });
 
     if (!authUser)
       throw new UnauthorizedError({

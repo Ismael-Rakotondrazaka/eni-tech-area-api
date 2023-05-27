@@ -1,3 +1,5 @@
+import { tagCollection } from "./tagCollection.js";
+
 const userResource = (resource) => {
   return {
     id: resource.id,
@@ -14,6 +16,7 @@ const userResource = (resource) => {
     description: resource.description,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt,
+    tags: tagCollection(resource.tags),
   };
 };
 

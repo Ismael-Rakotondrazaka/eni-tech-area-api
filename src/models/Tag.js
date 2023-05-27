@@ -13,7 +13,7 @@ export default (sequelize, DataTypes) => {
       // define association here
       models.Tag.belongsToMany(models.User, {
         through: models.UserTag,
-        // as: "UserQuestionTag",
+        as: "users",
         foreignKey: "tagId",
         otherKey: "userId",
       });
