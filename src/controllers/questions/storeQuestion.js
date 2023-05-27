@@ -7,7 +7,7 @@ import {
   BadRequestError,
   createDataResponse,
   validateTag,
-  createColorsFromTagName,
+  createRadomColor,
 } from "../../utils/index.js";
 
 import { Op } from "sequelize";
@@ -66,12 +66,10 @@ const storeQuestion = async (req, res, next) => {
 
     const newTags = await Tag.bulkCreate(
       tagsNameToCreate.map((name) => {
-        const colors = createColorsFromTagName(name);
-
         return {
           name,
-          bgColor: colors.bgColor,
-          textColor: colors.textColor,
+          bgColor: createRadomColor(),
+          textColor: "white",
         };
       })
     );

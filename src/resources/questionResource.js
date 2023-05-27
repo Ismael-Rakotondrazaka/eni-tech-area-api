@@ -9,9 +9,15 @@ const questionResource = (resource) => {
     content: resource.content,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt,
-    user: userResource(resource.user),
-    tags: tagCollection(resource.tags),
-    answers: answerCollection(resource.answers),
+    ...(resource.user && {
+      user: userResource(resource.user),
+    }),
+    ...(resource.tags && {
+      tags: tagCollection(resource.tags),
+    }),
+    ...(resource.answers && {
+      answers: answerCollection(resource.answers),
+    }),
   };
 };
 

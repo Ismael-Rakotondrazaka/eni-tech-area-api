@@ -31,6 +31,7 @@ const indexUserQuestion = async (req, res, next) => {
         userId: targetUser.id,
       },
       order: [["createdAt", "DESC"]],
+      include: ["user", "tags", "answers"],
     });
 
     const targetUserQuestionResource = questionCollection(targetUserQuestion);

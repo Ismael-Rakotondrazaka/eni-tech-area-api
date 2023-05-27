@@ -16,7 +16,9 @@ const userResource = (resource) => {
     description: resource.description,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt,
-    tags: tagCollection(resource.tags),
+    ...(resource.tags && {
+      tags: tagCollection(resource.tags),
+    }),
   };
 };
 

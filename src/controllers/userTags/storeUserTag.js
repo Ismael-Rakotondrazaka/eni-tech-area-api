@@ -36,6 +36,7 @@ const storeUserTag = async (req, res, next) => {
 
     if (!targetUser) throw new NotFoundError();
 
+    console.log(targetUser.id, authUser.id);
     if (targetUser.id !== authUser.id) throw new ForbiddenError();
 
     if (!Array.isArray(tags))
