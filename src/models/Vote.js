@@ -32,6 +32,7 @@ export default (sequelize, DataTypes) => {
           key: "id",
         },
         allowNull: false,
+        onDelete: "CASCADE",
       },
       userId: {
         type: DataTypes.INTEGER,

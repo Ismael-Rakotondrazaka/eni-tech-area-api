@@ -23,6 +23,7 @@ module.exports = {
           model: "questions",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       content: {
         type: Sequelize.TEXT,
