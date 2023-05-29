@@ -7,6 +7,7 @@ import {
   indexQuestionSuggestion,
   indexQuestionTag,
   deleteQuestion,
+  updateQuestion,
 } from "../../../../controllers/index.js";
 import { authMiddleware } from "../../../../middlewares/index.js";
 
@@ -23,5 +24,6 @@ questionRoutes.post("/", authMiddleware, storeQuestion);
 questionRoutes.get("/suggestions", authMiddleware, indexQuestionSuggestion);
 questionRoutes.get("/search", authMiddleware, searchQuestion);
 questionRoutes.delete("/:questionId", authMiddleware, deleteQuestion);
+questionRoutes.put("/:questionId", authMiddleware, updateQuestion);
 
 export { questionRoutes };
