@@ -28,6 +28,7 @@ export default (sequelize, DataTypes) => {
           key: "id",
         },
         allowNull: false,
+        onDelete: "CASCADE",
       },
       tagId: {
         type: DataTypes.INTEGER,

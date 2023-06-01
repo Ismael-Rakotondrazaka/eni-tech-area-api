@@ -7,7 +7,7 @@ const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
 
 const createAccessToken = (data) => {
   return jwt.sign(data, accessTokenSecret, {
-    expiresIn: accessTokenLife,
+    expiresIn: accessTokenLife ?? "10d",
   });
 };
 

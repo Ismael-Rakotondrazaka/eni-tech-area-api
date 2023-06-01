@@ -43,6 +43,7 @@ export default (sequelize, DataTypes) => {
           model: "answers",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       content: {
         type: DataTypes.TEXT,
