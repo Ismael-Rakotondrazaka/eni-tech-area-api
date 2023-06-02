@@ -1,4 +1,10 @@
-import { Answer, Notification, Question, User } from "../../models/index.js";
+import {
+  Answer,
+  Notification,
+  Question,
+  User,
+  Comment,
+} from "../../models/index.js";
 import { answerResource } from "../../resources/answerResource.js";
 import { notificationResource } from "../../resources/notificationResource.js";
 import { socketIO } from "../../services/socketIO/index.js";
@@ -12,8 +18,7 @@ import {
 const storeAnswer = async (req, res, next) => {
   try {
     const authUserId = req.payload?.user?.id;
-    const { questionId } = req.params;
-    let { content } = req.body;
+    let { content, questionId } = req.body;
 
     if (!authUserId)
       throw new UnauthorizedError({
@@ -22,6 +27,8 @@ const storeAnswer = async (req, res, next) => {
       });
 
     if (!/^\d+$/.test(questionId)) throw new NotFoundError();
+
+    questionId = +questionId; // turn questionId into number
 
     const authUser = await User.findByPk(authUserId);
 
@@ -41,15 +48,29 @@ const storeAnswer = async (req, res, next) => {
 
     const answerNotificationType = "answer";
 
-    const targetAnswer = await Answer.create({
+    const answerCreated = await Answer.create({
       userId: authUser.id,
       questionId: targetQuestion.id,
       content,
     });
 
-    await targetAnswer.reload();
+    // refetch the answer with user, comments, and votes
+    const targetAnswer = await Answer.findOne({
+      where: {
+        id: +answerCreated.id,
+      },
+      include: [
+        "user",
+        {
+          model: Comment,
+          as: "comments",
+          include: "user",
+        },
+        "votes",
+      ],
+    });
 
-    // the user will receive the notification only when the ansewerer is not the owner of the question
+    // the user will receive the notification only when the answerer is not the owner of the question
     if (questionOwner.id !== authUser.id) {
       const notificationContent = {
         type: answerNotificationType,
