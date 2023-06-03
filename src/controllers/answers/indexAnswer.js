@@ -1,55 +1,56 @@
-import { Answer, Question, User } from "../../models/index.js";
+import { Answer, Comment } from "../../models/index.js";
 import { answerCollection } from "../../resources/index.js";
-import {
-  UnauthorizedError,
-  createDataResponse,
-  NotFoundError,
-} from "../../utils/index.js";
+import { createDataResponse, NotFoundError } from "../../utils/index.js";
+import { answerFilter } from "../../utils/filters/index.js";
+import { getPagination } from "../../utils/getPagination.js";
 
 const indexAnswer = async (req, res, next) => {
   try {
-    const authUserId = req.payload?.user?.id;
-    const { questionId } = req.params;
+    const page = parseInt(req.query.page || 1);
+    const orderDirection = req.query.orderDirection || "ASC";
+    const size = 8;
 
-    if (!authUserId)
-      throw new UnauthorizedError({
-        message: "Credential doesn't match to our records.",
-        code: "E5_1",
-      });
+    if (page <= 0) {
+      throw new NotFoundError({ message: "Invalid page provided" });
+    }
 
-    if (!/^\d+$/.test(questionId)) throw new NotFoundError();
+    const whereQuery = answerFilter.getAnswerFilters(req);
 
-    const authUser = await User.findByPk(authUserId);
-
-    if (!authUser)
-      throw new UnauthorizedError({
-        message: "Credential doesn't match to our records.",
-        code: "E5_1",
-      });
-
-    const targetQuestion = await Question.findByPk(questionId);
-
-    if (!targetQuestion) throw new NotFoundError();
-
-    const targetAnswers = await Answer.findAll({
+    const { count, rows } = await Answer.findAndCountAll({
       where: {
-        questionId: targetQuestion.id,
+        ...whereQuery,
       },
-      order: [["createdAt", "ASC"]],
+      include: [
+        "user",
+        {
+          model: Comment,
+          as: "comments",
+          include: "user",
+        },
+        "votes",
+      ],
+      order: [["createdAt", orderDirection]],
+      offset: size * (page - 1),
+      limit: size,
     });
 
-    const targetAnswersResource = answerCollection(targetAnswers);
-
-    const data = {
-      answers: targetAnswersResource,
+    let data = {
+      answers: [],
     };
+
+    if (count > 0) {
+      const targetAnswersCollection = answerCollection(rows);
+
+      data = {
+        ...getPagination(count, size, page),
+        answers: targetAnswersCollection,
+      };
+    }
 
     const dataResponse = createDataResponse({
       data,
       request: req,
     });
-
-    res.status(201);
 
     return res.json(dataResponse);
   } catch (error) {

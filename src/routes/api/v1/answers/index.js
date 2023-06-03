@@ -4,6 +4,7 @@ import {
   showAnswer,
   updateAnswer,
   destroyAnswer,
+  indexAnswer,
 } from "../../../../controllers/index.js";
 import { authMiddleware } from "../../../../middlewares/index.js";
 import { voteRoutes } from "../votes/index.js";
@@ -15,6 +16,7 @@ const answerRoutes = Router({
 /**
  * Get an answer with votes and user
  */
+answerRoutes.get("/", indexAnswer);
 answerRoutes.post("/", authMiddleware, storeAnswer);
 answerRoutes.get("/:answerId", showAnswer);
 answerRoutes.put("/:answerId", authMiddleware, updateAnswer);
