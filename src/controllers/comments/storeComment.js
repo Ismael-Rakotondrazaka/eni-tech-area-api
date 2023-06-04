@@ -1,10 +1,4 @@
-import {
-  Answer,
-  Comment,
-  Question,
-  User,
-  Notification,
-} from "../../models/index.js";
+import { Answer, Comment, User, Notification } from "../../models/index.js";
 import {
   commentResource,
   notificationResource,
@@ -20,54 +14,50 @@ import { socketIO } from "../../services/socketIO/index.js";
 const storeComment = async (req, res, next) => {
   try {
     const authUserId = req.payload?.user?.id;
-    const { questionId, answerId } = req.params;
-    let { content } = req.body;
+    let { content, answerId } = req.body;
 
     if (!authUserId)
       throw new UnauthorizedError({
         message: "Credential doesn't match to our records.",
         code: "E5_1",
       });
-
-    if (!/^\d+$/.test(questionId) || !/^\d+$/.test(answerId))
-      throw new NotFoundError();
-
     const authUser = await User.findByPk(authUserId);
-
     if (!authUser)
       throw new UnauthorizedError({
         message: "Credential doesn't match to our records.",
         code: "E5_1",
       });
 
-    const targetQuestion = await Question.findByPk(questionId);
-
-    if (!targetQuestion) throw new NotFoundError();
-
-    const targetAnswer = await Answer.findOne({
-      where: {
-        id: answerId,
-        questionId,
-      },
+    if (!/^\d+$/.test(answerId)) throw new NotFoundError();
+    const targetAnswer = await Answer.findByPk(answerId, {
+      include: [
+        "user",
+        {
+          association: "question",
+          include: ["user"],
+        },
+      ],
     });
 
     if (!targetAnswer) throw new NotFoundError();
 
     content = validateContent(content);
 
-    const targetComment = await Comment.create({
+    const commentCreated = await Comment.create({
       userId: authUser.id,
       answerId: targetAnswer.id,
       content,
     });
 
-    await targetComment.reload();
+    const targetComment = await Comment.findByPk(commentCreated.id, {
+      include: ["user"],
+    });
 
     const commentNotificationType = "comment";
 
-    const questionOwner = await User.findByPk(targetQuestion.userId);
-
-    const answerOwner = await User.findByPk(targetAnswer.userId);
+    const questionOwner = targetAnswer.question.user;
+    const targetQuestion = targetAnswer.question;
+    const answerOwner = targetAnswer.user;
 
     const notificationContent = {
       type: commentNotificationType,

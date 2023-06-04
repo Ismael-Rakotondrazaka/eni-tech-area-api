@@ -12,6 +12,8 @@ const showComment = async (req, res, next) => {
       include: ["user"],
     });
 
+    if (!targetComment) throw new NotFoundError();
+
     const targetCommentResource = commentResource(targetComment);
 
     const data = {
