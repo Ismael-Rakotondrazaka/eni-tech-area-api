@@ -60,6 +60,8 @@ const updateQuestion = async (req, res, next) => {
       content,
     });
 
+    await targetQuestion.save();
+
     /**
      * First, we need to get all the current question tags
      */
