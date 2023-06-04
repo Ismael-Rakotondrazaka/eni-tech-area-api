@@ -12,6 +12,6 @@ const commentRoutes = Router({
 
 commentRoutes.get("/", indexComment);
 commentRoutes.post("/", authMiddleware, storeComment);
-commentRoutes.get("/:commentId", authMiddleware, showComment);
+commentRoutes.get("/:commentId", showComment);
 
 export { commentRoutes };
