@@ -1,7 +1,7 @@
 import { Comment } from "../../models/index.js";
 import { commentCollection } from "../../resources/index.js";
-import { NotFoundError, createDataResponse } from "../../utils/index.js";
 import { commentFilter } from "../../utils/filters/index.js";
+import { NotFoundError, createDataResponse } from "../../utils/index.js";
 import { getPagination } from "../../utils/getPagination.js";
 
 const indexComment = async (req, res, next) => {
@@ -27,15 +27,15 @@ const indexComment = async (req, res, next) => {
     });
 
     let data = {
-      answers: [],
+      comments: [],
     };
 
     if (count > 0) {
-      const targetAnswersCollection = commentCollection(rows);
+      const targetCommentsCollection = commentCollection(rows);
 
       data = {
         ...getPagination(count, size, page),
-        answers: targetAnswersCollection,
+        comments: targetCommentsCollection,
       };
     }
 
