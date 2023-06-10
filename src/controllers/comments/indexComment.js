@@ -1,35 +1,48 @@
-import { Answer, Comment } from "../../models/index.js";
+import { Comment } from "../../models/index.js";
 import { commentCollection } from "../../resources/index.js";
+import { commentFilter } from "../../utils/filters/index.js";
 import { NotFoundError, createDataResponse } from "../../utils/index.js";
+import { getPagination } from "../../utils/getPagination.js";
 
 const indexComment = async (req, res, next) => {
   try {
-    const answerId = req.query.answerId;
+    const page = parseInt(req.query.page || 1);
+    const orderDirection = req.query.orderDirection || "ASC";
+    const size = 8;
 
-    const targetAnswer = await Answer.findByPk(+answerId);
+    if (page <= 0) {
+      throw new NotFoundError({ message: "Invalid page provided" });
+    }
 
-    if (!targetAnswer) throw new NotFoundError({ message: "Answer not found" });
+    const whereQuery = commentFilter.getCommentFilters(req);
 
-    const targetComments = await Comment.findAll({
+    const { count, rows } = await Comment.findAndCountAll({
       where: {
-        answerId,
+        ...whereQuery,
       },
-      order: [["createdAt", "ASC"]],
-      include: "user",
+      include: ["user"],
+      order: [["createdAt", orderDirection]],
+      offset: size * (page - 1),
+      limit: size,
     });
 
-    const targetCommentsResource = commentCollection(targetComments);
-
-    const data = {
-      comments: targetCommentsResource,
+    let data = {
+      comments: [],
     };
+
+    if (count > 0) {
+      const targetCommentsCollection = commentCollection(rows);
+
+      data = {
+        ...getPagination(count, size, page),
+        comments: targetCommentsCollection,
+      };
+    }
 
     const dataResponse = createDataResponse({
       data,
       request: req,
     });
-
-    res.status(200);
 
     return res.json(dataResponse);
   } catch (error) {

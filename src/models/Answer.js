@@ -18,6 +18,7 @@ export default (sequelize, DataTypes) => {
 
       models.Answer.belongsTo(models.Question, {
         foreignKey: "questionId",
+        as: "question",
       });
 
       models.Answer.hasMany(models.Vote, {

@@ -1,4 +1,4 @@
-import { Answer, Comment, User, Notification } from "../../models/index.js";
+import { Comment, User, Notification } from "../../models/index.js";
 import {
   commentResource,
   notificationResource,
@@ -10,17 +10,20 @@ import {
   NotFoundError,
 } from "../../utils/index.js";
 import { socketIO } from "../../services/socketIO/index.js";
+import { isAuthorizedTo } from "../../policies/index.js";
 
-const storeComment = async (req, res, next) => {
+const updateComment = async (req, res, next) => {
   try {
     const authUserId = req.payload?.user?.id;
-    let { content, answerId } = req.body;
+    let { content } = req.body;
+    let { commentId } = req.params;
 
     if (!authUserId)
       throw new UnauthorizedError({
         message: "Credential doesn't match to our records.",
         code: "E5_1",
       });
+
     const authUser = await User.findByPk(authUserId);
     if (!authUser)
       throw new UnauthorizedError({
@@ -28,42 +31,49 @@ const storeComment = async (req, res, next) => {
         code: "E5_1",
       });
 
-    if (!/^\d+$/.test(answerId)) throw new NotFoundError();
-    const targetAnswer = await Answer.findByPk(answerId, {
+    if (!/^\d+$/.test(commentId)) throw new NotFoundError();
+    commentId = +commentId;
+    const targetComment = await Comment.findByPk(commentId, {
       include: [
         "user",
         {
-          association: "question",
-          include: ["user"],
+          association: "answer",
+          include: [
+            "user",
+            {
+              association: "question",
+              include: ["user"],
+            },
+          ],
         },
       ],
     });
+    if (!targetComment) throw new NotFoundError();
 
-    if (!targetAnswer) throw new NotFoundError();
+    await isAuthorizedTo({
+      user: authUser,
+      action: "update",
+      source: "Comment",
+      target: targetComment,
+    });
 
     content = validateContent(content);
 
-    const commentCreated = await Comment.create({
-      userId: authUser.id,
-      answerId: targetAnswer.id,
+    await targetComment.update({
       content,
-    });
-
-    const targetComment = await Comment.findByPk(commentCreated.id, {
-      include: ["user"],
     });
 
     const commentNotificationType = "comment";
 
-    const questionOwner = targetAnswer.question.user;
-    const targetQuestion = targetAnswer.question;
-    const answerOwner = targetAnswer.user;
+    const questionOwner = targetComment.answer.question.user;
+    const targetQuestion = targetComment.answer.question;
+    const answerOwner = targetComment.answer.user;
 
     const notificationContent = {
       type: commentNotificationType,
       questionId: targetQuestion.id,
       questionBy: questionOwner.id,
-      answerId: targetAnswer.id,
+      answerId: targetComment.id,
       answerBy: answerOwner.id,
       initiateBy: authUser.id,
       content,
@@ -110,12 +120,10 @@ const storeComment = async (req, res, next) => {
       request: req,
     });
 
-    res.status(201);
-
     return res.json(dataResponse);
   } catch (error) {
     next(error);
   }
 };
 
-export { storeComment };
+export { updateComment };

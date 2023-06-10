@@ -13,6 +13,7 @@ export default (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.Answer, {
         foreignKey: "answerId",
+        as: "answer",
       });
 
       this.belongsTo(models.User, {
