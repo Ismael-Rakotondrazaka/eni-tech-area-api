@@ -1,9 +1,11 @@
 import { ServerError } from "../utils/errors/index.js";
 
 import { answerPolicy } from "./answerPolicy.js";
+import { commentPolicy } from "./commentPolicy.js";
 
 const SOURCE_POLICY = {
   Answer: answerPolicy,
+  Comment: commentPolicy,
 };
 
 const isAuthorizedTo = (
